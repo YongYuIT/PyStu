@@ -1,3 +1,5 @@
 https://blog.csdn.net/yang625624461/article/details/129294675
 
 Brook设置：https://www.txthinking.com/talks/articles/brook-fakedns.article
+
+Pycharm使用Anaconda：https://blog.csdn.net/qq_37909691/article/details/120289658?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-120289658-blog-129294675.235%5Ev36%5Epc_relevant_anti_vip&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-120289658-blog-129294675.235%5Ev36%5Epc_relevant_anti_vip&utm_relevant_index=1
