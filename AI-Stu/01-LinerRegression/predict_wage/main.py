@@ -2,83 +2,45 @@ import torch
 from torch.utils.data import DataLoader
 
 from MyDataset import MyDataset
+from MyModel import MyModel
+import torch.nn as nn
 
 file = ""
 dataset = MyDataset(file)
-dataloader = DataLoader(dataset, batch_size=5, shuffle=False)
+# 每100个资料为一个分片
+tr_set = DataLoader(dataset, batch_size=100, shuffle=True)
+model = MyModel().to("cpu")
+criterion = nn.MSELoss()
+optimzer = torch.optim.SGD(model.parameters(), 0.1)  # 学习速率：0.1
+# Training -----------------------------
+for epoch in range(n_epochs):
+    model.train()
+    for x, y in tr_set:
+        optimzer.zero_grad()
+        x, y = x.to("cpu"), y = y.to("cpu")
+        perd = model(x)
+        loss = criterion(perd, y)
+        loss.backward()
+        optimzer.step()
 
-print("def tensor---------------------------------------------")
+# Validation -----------------------------
 
-x = torch.tensor([[1, -1], [-1, 1]])
-print(x)
+model.eval()
+total_loss = 0
+for x.y in dv_set:
+    x, y = x.to("cpu"), y.to("cpu")
+    with torch.no_grad():
+        perd = model(x)
+        loss = criterion(perd, y)
+    total_loss += loss.cpu().item * len(x)
+    avg_loss = total_loss / len(dv_set.dataset)
 
-x = torch.zeros([2, 2])
-print(x)
+# Testing -----------------------------
 
-x = torch.ones([1, 2, 5])
-print(x)
-
-print("add sub 乘---------------------------------------------")
-
-x = torch.tensor([[2., -3.], [-4., 2.]])
-y = torch.tensor([[2., -4.], [-2., 6.]])
-
-z = x + y
-print(z)
-
-z = x - y
-print(z)
-
-z = x @ y
-print("x乘以y=")
-print(z)
-
-print("pow sum and mean---------------------------------------------")
-
-z = x.pow(2)
-print(z)
-
-z = x.sum()
-print(z)
-
-print("y.mean")
-y = torch.tensor([1, 2, 3, 4, 5])
-z = y.float().mean()
-print(z)
-
-z = x.mean(dim=0)
-print(z)
-
-x = torch.randint(1, 10, [4, 2, 3, 5])  # 元素从1~10，四维，长度分别是4，2，3，5
-print(x)
-print(x.shape)
-print(x.float().mean(dim=1))
-
-print("zero and transpose---------------------------------------------")
-
-x = torch.zeros([2, 3])
-print(x)
-print(x.shape)
-
-x = x.transpose(0, 1)
-print(x.shape)
-
-print("squeeze and unsqueeze---------------------------------------------")
-
-x = torch.zeros([4, 2, 3, 5])
-y = x.squeeze(dim=0)
-print(y)
-print(y.shape)
-
-x = torch.zeros([1, 2, 3, 5])  # only length=1 works
-y = x.squeeze(dim=0)
-print(y)
-print(y.shape)
-
-x = torch.zeros([4, 2, 3, 5])
-y = x.unsqueeze(dim=0)
-print(y)
-print(y.shape)
-
-
-##### cat #####
+model.eval()
+perds = []
+for x in tt_set:
+    x = x.to("cpu")
+    with torch.no_grad():
+        pred = model(x)
+        pred.append(pred.cpu())
