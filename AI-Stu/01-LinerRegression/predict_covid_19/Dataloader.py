@@ -30,6 +30,8 @@ train_dataset, valid_dataset, test_dataset = COVID19Dataset(x_train, y_train), \
     COVID19Dataset(x_test)
 
 # Pytorch data loader loads pytorch dataset into batches.
+# shuffle：洗牌，对数据的顺序进行打乱
+# pin_memory：是否将 Tensor 数据加载到固定的内存位置。在使用 GPU 进行训练时，启用 pin_memory=True 可以帮助减少数据从主机内存到 GPU 内存的复制时间，并提高数据加载的吞吐量
 train_loader = DataLoader(train_dataset, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
 valid_loader = DataLoader(valid_dataset, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
 test_loader = DataLoader(test_dataset, batch_size=config['batch_size'], shuffle=False, pin_memory=True)

@@ -18,6 +18,10 @@ def trainer(train_loader, valid_loader, model, config, device):
     # 定义优化算法
     # TODO: 查看 https://pytorch.org/docs/stable/optim.html 以获得更多可用算法
     # TODO: L2 正则化（优化器（权重衰减...）或自行实现）
+    # torch.optim.SGD有三个入参：
+    #   1. 模型参数（也就是θ向量，也就是所有的模型中所有的w和b）
+    #   2. 学习速率
+    #   3. 动量，一种动态调整学习速率的方法
     optimizer = torch.optim.SGD(model.parameters(), lr=config['learning_rate'], momentum=0.9)
 
     writer = SummaryWriter()  # Writer of tensorboard.
