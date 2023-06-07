@@ -36,9 +36,12 @@ def trainer(train_loader, valid_loader, model, config, device):
         loss_record = []
 
         # tqdm 是一个可视化训练进度的软件包
+        # 通过tqdm将train_loader分割成每块batch_size大小的batch
         train_pbar = tqdm(train_loader, position=0, leave=True)
-
+        print("batche遍历 start ...... train_pbar size(batche个数):", len(train_pbar), ",type:", type(train_pbar))
+        batcheIndex = 0
         for x, y in train_pbar:
+            print("batcheIndex:", batcheIndex, "-->x-shape:", x.shape, "-->y-shape:", y.shape)
             optimizer.zero_grad()  # 将梯度初始化为0
             x, y = x.to(device), y.to(device)  # Move your data to device.
             pred = model(x)
@@ -51,7 +54,8 @@ def trainer(train_loader, valid_loader, model, config, device):
             # 在 tqdm 进度条上显示当前epoch数和loss（日志前面的红色部分）
             train_pbar.set_description(f'Epoch [{epoch + 1}/{n_epochs}]')
             train_pbar.set_postfix({'loss': loss.detach().item()})
-
+            batcheIndex += 1
+        print("batche遍历 end ......")
         mean_train_loss = sum(loss_record) / len(loss_record)
         writer.add_scalar('Loss/train', mean_train_loss, step)
 
