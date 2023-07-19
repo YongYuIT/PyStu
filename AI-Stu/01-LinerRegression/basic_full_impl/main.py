@@ -3,7 +3,6 @@
 # 它会告诉解释器将Matplotlib的图形直接嵌入到Notebook中的输出单元格中，而不是弹出一个新的窗口显示图形。
 # 这种方式被称为"内嵌显示"（inline display），它允许你在Notebook中直接看到绘制的图形，而无需切换到其他窗口
 import matplotlib
-
 matplotlib.use('TkAgg')
 
 import torch
@@ -76,7 +75,7 @@ def linreg(X, w, b):
     return torch.matmul(X, w) + b
 
 
-# 定义损失函数，MSE
+# 定义损失函数，MSE（实际上这里只计算了平方均值，没有求和；平方均值求和才是完整的MSE）
 def squared_loss(y_hat, y):
     return (y_hat - y.reshape(y_hat.shape)) ** 2 / 2
 
@@ -97,8 +96,8 @@ loss = squared_loss
 for epoch in range(num_epochs):
     for X, y in data_iter(batch_size, features, labels):
         l = loss(net(X, w, b), y)  # X和y的小批量损失
-        # 因为l形状是(batch_size,1)，而不是一个标量。l中的所有元素被加到一起，
-        # 并以此计算关于[w,b]的梯度
+        # 因为l形状是(batch_size,1)，而不是一个标量
+        # l中的所有元素被加到一起就是损失函数的定义，以此计算损失函数关于[w,b]的梯度
         l.sum().backward()
         sgd([w, b], lr, batch_size)  # 使用参数的梯度更新参数
     with torch.no_grad():
