@@ -3,6 +3,7 @@ import torch
 
 import DataLoader as thk_dataLoader
 import ModelDef as tnk_modelDef
+import TrainModel as thk_trainModel
 
 # 定义批量大小
 batch_size = 256
@@ -28,8 +29,8 @@ model = tnk_modelDef.ModelDef(batch_size, W, b, lr, num_epochs)
 train_iter, test_iter = thk_dataLoader.load_data_fashion_mnist(model.batch_size)
 
 # 执行深度学习，得到W和b
-tnk_modelDef.train_ch3(model, train_iter, test_iter)
+thk_trainModel.train_ch3(model, train_iter, test_iter)
 
 # 用训练结果（W和b）进行预测，展示结果
-tnk_modelDef.predict_ch3(model, test_iter)
+thk_trainModel.predict_ch3(model, test_iter)
 plt.show()

@@ -1,6 +1,7 @@
 import torch
 import Accuracy as thk_accuracy
 
+
 # 在n个变量上累加
 class Accumulator:
     def __init__(self, n):
@@ -19,11 +20,9 @@ class Accumulator:
     def __getitem__(self, idx):
         return self.data[idx]
 
+
 # 计算在指定数据集上模型的精度
 def evaluate_accuracy(net, data_iter):
-    if isinstance(net, torch.nn.Module):
-        # 将模型设置为评估模式
-        net.eval()
     # 正确预测数、预测总数
     # 得到[0.0,0.0]
     metric = Accumulator(2)
