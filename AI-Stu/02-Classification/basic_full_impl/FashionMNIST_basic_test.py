@@ -29,7 +29,9 @@ def get_fashion_mnist_labels(labels):
 # 绘制图像列表
 def show_images(imgs, num_rows, num_cols, titles=None, scale=1.5):  # @save
     figsize = (num_cols * scale, num_rows * scale)
+    # subplots：在一张大图中展示若干个小图。num_rows=2 num_cols=9 表示大图将展示两行，每行9个小图
     _, axes = plt.subplots(num_rows, num_cols, figsize=figsize)
+    # 由于上面subplots返回的是一个2*9的子图集合，flatten用于将这个集合转成一维数组
     axes = axes.flatten()
     for i, (ax, img) in enumerate(zip(axes, imgs)):
         if torch.is_tensor(img):
