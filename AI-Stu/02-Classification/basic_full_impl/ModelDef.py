@@ -8,11 +8,12 @@ import ImageShow as thk_imageShow
 
 
 class ModelDef:
-    def __init__(self, batch_size, W, b, lr):
+    def __init__(self, batch_size, W, b, lr, num_epochs):
         self.W = W
         self.b = b
         self.batch_size = batch_size
         self.lr = lr
+        self.num_epochs = num_epochs
 
     @staticmethod
     def softmax(X):
@@ -67,26 +68,19 @@ def train_epoch_ch3(model, train_iter):
         # 计算梯度并更新参数
         y_hat = model.net(X)
         l = model.loss(y_hat, y)
-        if isinstance(model.updater, torch.optim.Optimizer):
-            # 使用PyTorch内置的优化器和损失函数
-            model.updater.zero_grad()
-            l.mean().backward()
-            model.updater.step()
-        else:
-            # 使用定制的优化器和损失函数（本程序使用这种）
-            l.sum().backward()
-            # 执行SGD
-            model.updater()
+        l.sum().backward()
+        # 执行SGD
+        model.updater()
         metric.add(float(l.sum()), thk_accuracy.accuracy(y_hat, y), y.numel())
     # 返回训练损失和训练精度
     return metric[0] / metric[2], metric[1] / metric[2]
 
 
 # 训练模型（定义见第3章）
-def train_ch3(model, train_iter, test_iter, num_epochs):  # @save
-    animator = thk_animator.Animator(xlabel='epoch', xlim=[1, num_epochs], ylim=[0.3, 0.9],
+def train_ch3(model, train_iter, test_iter):  # @save
+    animator = thk_animator.Animator(xlabel='epoch', xlim=[1, model.num_epochs], ylim=[0.3, 0.9],
                                      legend=['train loss', 'train acc', 'test acc'])
-    for epoch in range(num_epochs):
+    for epoch in range(model.num_epochs):
         train_metrics = train_epoch_ch3(model, train_iter)
         test_acc = thk_accumulator.evaluate_accuracy(model.net, test_iter)
         animator.add(epoch + 1, train_metrics + (test_acc,))

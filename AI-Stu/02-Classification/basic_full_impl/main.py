@@ -19,16 +19,16 @@ b = torch.zeros(num_outputs, requires_grad=True)
 # 定义学习速率
 lr = 0.1
 
-model = tnk_modelDef.ModelDef(batch_size, W, b, lr)
-
 # 定义学习终点
 num_epochs = 10
 
+model = tnk_modelDef.ModelDef(batch_size, W, b, lr, num_epochs)
+
 # 导入训练数据
-train_iter, test_iter = thk_dataLoader.load_data_fashion_mnist(batch_size)
+train_iter, test_iter = thk_dataLoader.load_data_fashion_mnist(model.batch_size)
 
 # 执行深度学习，得到W和b
-tnk_modelDef.train_ch3(model, train_iter, test_iter, num_epochs)
+tnk_modelDef.train_ch3(model, train_iter, test_iter)
 
 # 用训练结果（W和b）进行预测，展示结果
 tnk_modelDef.predict_ch3(model, test_iter)
