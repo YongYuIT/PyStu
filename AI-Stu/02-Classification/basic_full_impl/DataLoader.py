@@ -2,6 +2,11 @@ import torchvision
 from torchvision import transforms
 from torch.utils import data
 
+# 返回Fashion-MNIST数据集的文本标签
+def get_fashion_mnist_labels(labels):
+    text_labels = ['t-shirt', 'trouser', 'pullover', 'dress', 'coat',
+                   'sandal', 'shirt', 'sneaker', 'bag', 'ankle boot']
+    return [text_labels[int(i)] for i in labels]
 
 # 使用4个进程来读取数据
 def get_dataloader_workers():
@@ -22,11 +27,3 @@ def load_data_fashion_mnist(batch_size, resize=None):
             data.DataLoader(mnist_test, batch_size, shuffle=False,
                             num_workers=get_dataloader_workers()))
 
-
-train_iter, test_iter = load_data_fashion_mnist(32, resize=64)
-
-# 确保子进程不会再次执行主模块的代码
-if __name__ == '__main__':
-    for X, y in train_iter:
-        print(X.shape, X.dtype, y.shape, y.dtype)
-        break
