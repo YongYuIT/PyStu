@@ -7,7 +7,8 @@ import ModelDef as tnk_modelDef
 # main
 # Accumulator
 # ModelDef
-# 三个文件，其他文件均相同
+# TrainModel
+# 四个文件，其他文件均相同
 
 # 定义批量大小
 batch_size = 256
