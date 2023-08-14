@@ -14,7 +14,7 @@ def load_array(data_arrays, batch_size, is_train=True):
 
 
 # 加载训练/测试集
-def load_data(batch_size):
+def load_data(model):
     max_degree = 20  # 多项式的最大阶数
     n_train, n_test = 100, 100  # 训练和测试数据集大小
     true_w = np.zeros(max_degree)  # 分配大量的空间
@@ -49,15 +49,14 @@ def load_data(batch_size):
     labels += np.random.normal(scale=0.1, size=labels.shape)
 
     # NumPy ndarray转换为tensor
-    poly_features, labels = [torch.tensor(x, dtype=
-    torch.float32) for x in [poly_features, labels]]
+    poly_features, labels = [torch.tensor(x, dtype=torch.float32) for x in [poly_features, labels]]
 
-    train_features = poly_features[:n_train, :4]
-    test_features = poly_features[n_train:, :4]
+    train_features = poly_features[:n_train, :model.num_features]
+    test_features = poly_features[n_train:, :model.num_features]
     train_labels = labels[:n_train]
     test_labels = labels[n_train:]
 
-    train_iter = load_array((train_features, train_labels.reshape(-1, 1)), batch_size)
-    test_iter = load_array((test_features, test_labels.reshape(-1, 1)), batch_size, is_train=False)
+    train_iter = load_array((train_features, train_labels.reshape(-1, 1)), model.batch_size)
+    test_iter = load_array((test_features, test_labels.reshape(-1, 1)), model.batch_size, is_train=False)
 
     return train_iter, test_iter
