@@ -49,8 +49,8 @@ def load_data(batch_size):
     labels += np.random.normal(scale=0.1, size=labels.shape)
 
     # NumPy ndarray转换为tensor
-    true_w, features, poly_features, labels = [torch.tensor(x, dtype=
-    torch.float32) for x in [true_w, features, poly_features, labels]]
+    poly_features, labels = [torch.tensor(x, dtype=
+    torch.float32) for x in [poly_features, labels]]
 
     train_features = poly_features[:n_train, :4]
     test_features = poly_features[n_train:, :4]
