@@ -30,7 +30,6 @@ def train_ch3(model, train_iter, test_iter):  # @save
     for epoch in range(model.num_epochs):
         train_epoch_ch3(model, train_iter)
         if epoch == 0 or (epoch + 1) % 20 == 0:
-            animator.add(epoch + 1, (thk_accumulator.evaluate_loss(model.net, train_iter, model.loss),
-                                     thk_accumulator.evaluate_loss(model.net, test_iter, model.loss)))
+            animator.add(epoch + 1, (thk_accumulator.evaluate_loss(model, train_iter),
+                                     thk_accumulator.evaluate_loss(model, test_iter)))
     print('weight:', model.net[0].weight.data.numpy())
-

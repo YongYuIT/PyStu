@@ -3,35 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import torch
 from torch import nn
-from torch.utils import data
 import Animator as thk_animator
 import Accuracy as thk_accuracy
+import Accumulator as thk_accumulator
+import DataLoader as thk_dataLoader
 
 
 ########################################################################################################################
-class Accumulator:
-    """For accumulating sums over `n` variables."""
-
-    def __init__(self, n):
-        """Defined in :numref:`sec_softmax_scratch`"""
-        self.data = [0.0] * n
-
-    def add(self, *args):
-        self.data = [a + float(b) for a, b in zip(self.data, args)]
-
-    def reset(self):
-        self.data = [0.0] * len(self.data)
-
-    def __getitem__(self, idx):
-        return self.data[idx]
-
-
-def load_array(data_arrays, batch_size, is_train=True):
-    """Construct a PyTorch data iterator.
-
-    Defined in :numref:`sec_linear_concise`"""
-    dataset = data.TensorDataset(*data_arrays)
-    return data.DataLoader(dataset, batch_size, shuffle=is_train)
 
 
 def train_epoch_ch3(net, train_iter, loss, updater):
@@ -42,7 +20,7 @@ def train_epoch_ch3(net, train_iter, loss, updater):
     if isinstance(net, torch.nn.Module):
         net.train()
     # Sum of training loss, sum of training accuracy, no. of examples
-    metric = Accumulator(3)
+    metric = thk_accumulator.Accumulator(3)
     for X, y in train_iter:
         # Compute gradients and update parameters
         y_hat = net(X)
@@ -86,7 +64,7 @@ print(features[:2], poly_features[:2, :], labels[:2])
 
 def evaluate_loss(net, data_iter, loss):  # @save
     """评估给定数据集上模型的损失"""
-    metric = Accumulator(2)  # 损失的总和,样本数量
+    metric = thk_accumulator.Accumulator(2)  # 损失的总和,样本数量
     for X, y in data_iter:
         out = net(X)
         y = y.reshape(out.shape)
@@ -102,20 +80,21 @@ def train(train_features, test_features, train_labels, test_labels,
     # 不设置偏置，因为我们已经在多项式中实现了它
     net = nn.Sequential(nn.Linear(input_shape, 1, bias=False))
     batch_size = min(10, train_labels.shape[0])
-    train_iter = load_array((train_features, train_labels.reshape(-1, 1)),
-                            batch_size)
-    test_iter = load_array((test_features, test_labels.reshape(-1, 1)),
-                           batch_size, is_train=False)
+    train_iter = thk_dataLoader.load_array((train_features, train_labels.reshape(-1, 1)),
+                                           batch_size)
+    test_iter = thk_dataLoader.load_array((test_features, test_labels.reshape(-1, 1)),
+                                          batch_size, is_train=False)
     trainer = torch.optim.SGD(net.parameters(), lr=0.01)
     animator = thk_animator.Animator(xlabel='epoch', ylabel='loss', yscale='log',
-                                         xlim=[1, num_epochs], ylim=[1e-3, 1e2],
-                                         legend=['train', 'test'])
+                                     xlim=[1, num_epochs], ylim=[1e-3, 1e2],
+                                     legend=['train', 'test'])
     for epoch in range(num_epochs):
         train_epoch_ch3(net, train_iter, loss, trainer)
         if epoch == 0 or (epoch + 1) % 20 == 0:
             animator.add(epoch + 1, (evaluate_loss(net, train_iter, loss),
                                      evaluate_loss(net, test_iter, loss)))
     print('weight:', net[0].weight.data.numpy())
+
 
 # 从多项式特征中选择前4个维度，即1,x,x^2/2!,x^3/3!
 train(poly_features[:n_train, :4], poly_features[n_train:, :4],

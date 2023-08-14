@@ -1,16 +1,16 @@
 # fix G:\UE_DEV\dev_tools_running\anaconda3\envs\test_py-3-9-17-fix-mxnet\lib\site-packages\mxnet\numpy\utils.py:37
-from mxnet import gluon
 import numpy as np
 import math
 import torch
+from torch.utils import data
 
 
 def load_array(data_arrays, batch_size, is_train=True):
-    """Construct a Gluon data iterator.
+    """Construct a PyTorch data iterator.
 
     Defined in :numref:`sec_linear_concise`"""
-    dataset = gluon.data.ArrayDataset(*data_arrays)
-    return gluon.data.DataLoader(dataset, batch_size, shuffle=is_train)
+    dataset = data.TensorDataset(*data_arrays)
+    return data.DataLoader(dataset, batch_size, shuffle=is_train)
 
 
 # 加载训练/测试集

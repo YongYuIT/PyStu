@@ -10,7 +10,7 @@ class ModelDef:
         self.num_epochs = num_epochs
 
         # 定义网络
-        input_shape = 1
+        input_shape = 4
         # 不设置偏置，因为我们已经在多项式中实现了它
         self.net = nn.Sequential(nn.Linear(input_shape, 1, bias=False))
 

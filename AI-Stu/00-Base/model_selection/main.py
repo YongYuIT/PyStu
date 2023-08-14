@@ -7,10 +7,10 @@ import ModelDef as tnk_modelDef
 batch_size = 10
 
 # 定义学习速率
-lr = 0.1
+lr = 0.01
 
 # 定义学习终点
-num_epochs = 10
+num_epochs = 400
 
 model = tnk_modelDef.ModelDef(batch_size, lr, num_epochs)
 
