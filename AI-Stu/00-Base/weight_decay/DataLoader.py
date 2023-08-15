@@ -18,7 +18,7 @@ def load_data(totalSamples, trainSamplesRate, num_features, batch_size):
     trainSamplesNum = math.ceil(totalSamples * trainSamplesRate)
 
     # 构造随机的一组wight，这组wight就是拟合的目标
-    wight = np.random.rand(num_features, 1)
+    wight = np.random.uniform(0.009, 0.011, size=(num_features, 1))
     print("top 10 of wight --> ", wight[:10])
     print("wight shape --> ", wight.shape)
     wightT = wight.reshape(1, -1)

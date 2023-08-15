@@ -6,10 +6,10 @@ import ModelDef as tnk_modelDef
 # 正常拟合---------------------------------------------------------------------------------
 
 # 定义批量大小
-batch_size = 5
+batch_size = 10
 
 # 定义学习速率
-lr = 0.001
+lr = 0.01
 
 # 定义学习终点
 num_epochs = 500
@@ -21,7 +21,7 @@ num_features = 200
 lambd = 0
 
 # 导入训练数据
-train_iter, test_iter = thk_dataLoader.load_data(2000, 0.1, num_features, batch_size)
+train_iter, test_iter = thk_dataLoader.load_data(2000, 0.01, num_features, batch_size)
 
 model = tnk_modelDef.ModelDef(batch_size, lr, num_epochs, num_features, lambd)
 
@@ -32,8 +32,8 @@ plt.show()
 
 ####################################################################
 # 训练数据集设置为200，正则化系数lambd=0的时候出现明显的过拟合
-# 下面将正则化系数改成100
-lambd = 10
+# 下面将正则化系数改成3
+lambd = 3
 
 model = tnk_modelDef.ModelDef(batch_size, lr, num_epochs, num_features, lambd)
 

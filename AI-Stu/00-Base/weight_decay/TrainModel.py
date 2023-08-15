@@ -25,7 +25,7 @@ def train_epoch_ch3(model, train_iter):
 # 训练模型（定义见第3章）
 def train_ch3(model, train_iter, test_iter):  # @save
     animator = thk_animator.Animator(xlabel='epoch', ylabel='loss', yscale='log',
-                                     xlim=[1, model.num_epochs], ylim=[1e-10, 1e4],
+                                     xlim=[1, model.num_epochs], ylim=[1e-15, 1e4],
                                      legend=['train', 'test'])
     for epoch in range(model.num_epochs):
         train_epoch_ch3(model, train_iter)
