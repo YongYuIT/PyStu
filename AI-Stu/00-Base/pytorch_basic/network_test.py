@@ -91,3 +91,86 @@ print("X5 org value: ", X5)
 print("X5 after net: ", net(X5))
 
 print("-----------------------------------------------------------------------------")
+
+
+# 4、自定义顺序块
+# nn.Sequential是一种内置的顺序块，如果想自定义实现类似的功能需要实现如下两点
+# a. 实现追加功能：一种将块逐个追加到列表中的函数
+# b. 顺序执行的传播函数：一种前向传播函数，用于将输入按追加块的顺序传递给块组成的“链条”
+
+class MySequential(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+    # 追加函数
+    def build(self, subModel):
+        indexStr = str(len(self._modules))
+        # 这里，subModel是Module子类的一个实例
+        # 我们把它保存在'Module'类的成员变量_modules中（MySequential也是Module类，因为MySequential继承了Module）
+        # _module的类型是OrderedDict
+        self._modules[indexStr] = subModel
+        return self
+
+    def forward(self, X):
+        # OrderedDict保证了按照成员添加的顺序遍历它们
+        for block in self._modules.values():
+            X = block(X)
+        return X
+
+
+net2 = MySequential().build(nn.Linear(20, 256)).build(nn.ReLU()).build(nn.Linear(256, 10))
+X6 = X.clone().detach()
+print("X6 org value: ", X6)
+print("X6 after net: ", net2(X6))
+net2.apply(init_constant)
+print("change net2 by init_constant...")
+X7 = X.clone().detach()
+print("X7 org value: ", X7)
+print("X7 after net: ", net2(X7))
+
+print("-----------------------------------------------------------------------------")
+
+
+# 5、在前向传播函数中执行代码
+class FixedHiddenMLP(nn.Module):
+    def __init__(self):
+        super().__init__()
+        # 不计算梯度的随机权重参数。因此其在训练期间保持不变
+        self.rand_weight = torch.rand((20, 20), requires_grad=False)
+        self.linear = nn.Linear(20, 20)
+
+    def forward(self, X):
+        X = self.linear(X)
+        # 使用创建的常量参数以及relu和mm函数
+        X = F.relu(torch.mm(X, self.rand_weight) + 1)
+        # 复用全连接层。这相当于两个全连接层共享参数
+        X = self.linear(X)
+        # 控制流
+        while X.abs().sum() > 1:
+            X /= 2
+        return X.sum()
+
+
+X8 = X.clone().detach()
+net3 = FixedHiddenMLP()
+print("X8 org value: ", X8)
+print("X8 after net: ", net3(X8))
+
+
+# 混合搭配各种组合块
+class NestMLP(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.net = nn.Sequential(nn.Linear(20, 64), nn.ReLU(),
+                                 nn.Linear(64, 32), nn.ReLU())
+        self.linear = nn.Linear(32, 16)
+
+    def forward(self, X):
+        return self.linear(self.net(X))
+
+
+X9 = X.clone().detach()
+net4 = nn.Sequential(NestMLP(), nn.Linear(16, 20), FixedHiddenMLP())
+
+print("X9 org value: ", X9)
+print("X9 after net: ", net4(X9))
