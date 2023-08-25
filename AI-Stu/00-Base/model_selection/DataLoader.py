@@ -56,6 +56,9 @@ def load_data(model):
     train_labels = labels[:n_train]
     test_labels = labels[n_train:]
 
+    print("train_features to load shape-->", train_features.shape)
+    print("train_labels to load shape-->", train_labels.reshape(-1, 1).shape)
+
     train_iter = load_array((train_features, train_labels.reshape(-1, 1)), model.batch_size)
     test_iter = load_array((test_features, test_labels.reshape(-1, 1)), model.batch_size, is_train=False)
 
