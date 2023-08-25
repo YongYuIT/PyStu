@@ -2,6 +2,8 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
+# 本示例着重体验torch.nn.Module —— pytorch中块的使用
+
 # 1、借助Sequential和内置块，快速构建深度网络
 # 这是一个由三个块顺序连接形成的深度网络
 # input(20) --> 线性变换(20->256) --> ReLU激活(256) --> 线性变换(256->10) --> 输出(10)
