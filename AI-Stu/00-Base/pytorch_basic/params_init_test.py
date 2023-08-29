@@ -1,6 +1,6 @@
 # 本示例着重体验torch.nn.Module中参数初始化
 
-import torch
+
 from torch import nn
 
 net = nn.Sequential(nn.Linear(4, 8), nn.ReLU(), nn.Linear(8, 1))
