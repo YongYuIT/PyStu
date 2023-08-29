@@ -22,6 +22,7 @@ y = net(X)
 y_l2 = torch.norm(y)
 y_l2.backward()
 print("type of weight", type(net[2].weight))
+# 梯度会加在一起
 print(net[2].weight.grad)
 print(net[4].weight.grad)
 print("type of weight data", type(net[2].weight.data))
