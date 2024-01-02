@@ -1,0 +1,1 @@
+scrapy startproject get_dog_pic_demo
