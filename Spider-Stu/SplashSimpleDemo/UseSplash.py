@@ -1,4 +1,5 @@
 import requests
+import StringToFile as fpring
 
 # Splash服务的地址
 splash_url = 'http://192.168.146.128:8050/render.html'
@@ -9,12 +10,13 @@ url = 'https://www.bing.com/images/search?q=dog&qs=n&form=QBILPG&sp=-1&lq=0&pq=d
 # Splash请求参数，指定要渲染的网页URL和一些其他选项
 params = {
     'url': url,
-    'wait': 5,  # 等待页面加载的时间（单位：秒）
-    # 可以添加其他选项，比如'html'，'png'等来获取不同形式的渲染结果
+    'wait': 10,  # 等待页面加载的时间（单位：秒）
+    'render_all': 1,  # 加载所有JavaScript代码
+    'images': 1,  # 加载所有图片
 }
 
 # 发起Splash请求
 response = requests.get(splash_url, params=params)
 
 # 打印渲染后的页面内容
-print(response.text)
+fpring.printToFile(response.text, "using.html")
