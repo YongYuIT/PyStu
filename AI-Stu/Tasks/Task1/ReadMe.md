@@ -42,7 +42,8 @@
 
 1. 继承 pytorch 里面的 Dataset，自定义数据库 ImgClassDataSet
 2. 读取pic_dict字典里面的数据，将其转换为 ImgClassDataSet
-3. 使用 pytorch data.DataLoader 批量读取数据
+3. 将数据集 ImgClassDataSet 按照8:2的比例随机划分成训练集和测试集
+4. 使用 pytorch data.DataLoader 批量读取数据
 
 
 
