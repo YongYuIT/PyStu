@@ -1,11 +1,19 @@
 from PIL import Image, ImageEnhance
 
-import ImageLeft2Right as IL2R
-import ImageRemoveColor as IRC
-import ImageToSquare as I2S
-import ResizeImage as RI
-from PIL import Image
+from DataPreprocessing import ImageLeft2Right as IL2R
+from DataPreprocessing import ImageRemoveColor as IRC
+from DataPreprocessing import ImageToSquare as I2S
+from DataPreprocessing import ResizeImage as RI
 import matplotlib.pyplot as plt
+
+
+def ImageEnhanceTo5(image):
+    enhancer = ImageEnhance.Brightness(image)
+    brightened_image_1_1 = enhancer.enhance(1.1)
+    brightened_image_1_2 = enhancer.enhance(1.2)
+    brightened_image_1_3 = enhancer.enhance(1.3)
+    brightened_image_1_4 = enhancer.enhance(1.4)
+    return [image, brightened_image_1_1, brightened_image_1_2, brightened_image_1_3, brightened_image_1_4]
 
 
 def test():
@@ -38,6 +46,3 @@ def test():
 
     plt.tight_layout()  # 调整子图布局，防止重叠
     plt.show()
-
-
-test()

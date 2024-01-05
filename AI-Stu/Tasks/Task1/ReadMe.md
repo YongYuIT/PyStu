@@ -21,4 +21,16 @@
 3. 图片黑白化：将彩色图片转化为黑白图片
 4. 图像增广：
    * 将图片左右颠倒
-   * 将图片亮度进行1/2和2倍缩放
+   * 将图片亮度进行1.1~1.4倍缩放
+
+## 数据张量化存储（DataStorage）
+
+参考：https://zh.d2l.ai/chapter_deep-learning-computation/read-write.html#id2
+
+1. 将图像增广之后的图片命名为type_id_index，其中:
+   * type为图片中的动物类型
+   * id为图片的文件名
+   * index为增广之后的图片的下标
+2. 将 type_id_index --> 图片数据张量 字典借助 torch.save 保存为 pic_dict
+3. 将来需要用到的时候，使用torch.load加载
+

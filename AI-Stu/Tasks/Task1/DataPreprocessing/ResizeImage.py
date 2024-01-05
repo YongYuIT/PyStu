@@ -1,5 +1,5 @@
 from PIL import Image
-import ImageToSquare as I2S
+from DataPreprocessing import ImageToSquare as I2S
 import matplotlib.pyplot as plt
 import numpy as np
 

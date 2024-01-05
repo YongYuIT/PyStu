@@ -1,7 +1,7 @@
 from PIL import Image
-import ImageToSquare as I2S
-import ResizeImage as RI
-import ImageRemoveColor as IRC
+from DataPreprocessing import ImageToSquare as I2S
+from DataPreprocessing import ResizeImage as RI
+from DataPreprocessing import ImageRemoveColor as IRC
 import matplotlib.pyplot as plt
 
 
