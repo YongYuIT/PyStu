@@ -1,6 +1,6 @@
 # 整体目标
 
-使用全链接判断图片里面有没有狗
+使用全链接判断图片里面的动物类型
 
 # 数据准备（DataPrepare）
 
@@ -33,4 +33,16 @@
    * index为增广之后的图片的下标
 2. 将 type_id_index --> 图片数据张量 字典借助 torch.save 保存为 pic_dict
 3. 将来需要用到的时候，使用torch.load加载
+
+# 模型训练
+
+参考：AI-Stu\02-Classification\mlp_simple_impl
+
+## 数据规范化读取（DataStdRead）
+
+1. 继承 pytorch 里面的 Dataset，自定义数据库 ImgClassDataSet
+2. 读取pic_dict字典里面的数据，将其转换为 ImgClassDataSet
+3. 使用 pytorch data.DataLoader 批量读取数据
+
+
 

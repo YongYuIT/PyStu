@@ -9,7 +9,7 @@ transform = transforms.Compose([
     transforms.ToTensor(),  # 将图像转换为张量
 ])
 
-allPicDictName = 'allPicDict'
+allPicDictName = 'pic_dict'
 
 
 def ImagesSaveToTensers(picRootPath):
@@ -72,6 +72,3 @@ def testRead():
 
     plt.tight_layout()  # 调整子图布局，防止重叠
     plt.show()
-
-
-testRead()
