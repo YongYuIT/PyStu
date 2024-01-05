@@ -45,6 +45,3 @@ def test():
             axes.set_title(batch_keys[0])
         plt.tight_layout()  # 调整子图布局，防止重叠
         plt.show()
-
-
-test()
