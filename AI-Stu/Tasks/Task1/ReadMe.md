@@ -53,4 +53,18 @@
    * 5000:2500 ReLU
    * ...（features减半）
    * 10:5
-2. 
+
+# 模型优化
+
+## 原始状况
+
+超参
+~~~
+batchSize = 100
+learningRate = 0.1
+numEpochs = 20
+~~~
+
+模型：全链接，每层Leatures减半
+
+实验结果：

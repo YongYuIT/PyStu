@@ -2,6 +2,7 @@ from DataStorage import ImagesSaveToTensers as ISTT
 from DataStdRead import ImgClassDataSet as ICDS
 from DataStdRead import ImgClassDataLoader as ICDL
 from ModelDesign import ModelDef as MD
+from Tools import ShowDict as SD
 import os
 
 # 读取图片，将图片存储为张量字典
@@ -18,4 +19,5 @@ train_data, test_data = ICDL.getDataLoader(dataset, batchSize)
 learningRate = 0.1
 numEpochs = 20
 model = MD.ModelDef(batchSize, learningRate, numEpochs)
-model.train(train_data, test_data)
+dictTrainRecords = model.train(train_data, test_data)
+SD.showDict("原始状况", "epoch次数", "test集准确性")
