@@ -33,6 +33,8 @@ def ImagesSaveToTensers(picRootPath):
                         # 由于我们只需要黑白通道上的数据，所以此处需要取一下下标
                         exImageTensor = transform(exImages[index])[0]
                         allPicDict[exImageName] = exImageTensor
+    if os.path.exists(allPicDictName):
+        os.remove(allPicDictName)
     torch.save(allPicDict, allPicDictName)
 
 

@@ -3,6 +3,16 @@ from torch.utils.data import Dataset, DataLoader
 from DataStorage import ImagesSaveToTensers as ISTT
 import matplotlib.pyplot as plt
 
+# 标签规范化
+
+labelDict = {
+    'dog': torch.Tensor([1, 0, 0, 0, 0]),
+    'bird': torch.Tensor([0, 1, 0, 0, 0]),
+    'girl': torch.Tensor([0, 0, 1, 0, 0]),
+    'pig': torch.Tensor([0, 0, 0, 1, 0]),
+    'snake': torch.Tensor([0, 0, 0, 0, 1]),
+}
+
 
 # ImgClassDataSet 继承自 Dataset
 class ImgClassDataSet(Dataset):
@@ -19,7 +29,7 @@ class ImgClassDataSet(Dataset):
         key = self.keys[index]  # 获取对应索引的键
         value = self.values[index]  # 获取对应索引的值
         type = key.split("_")[0]
-        return type, value  # 返回键值对作为数据集的元素
+        return labelDict.get(type), value  # 返回键值对作为数据集的元素
 
 
 def test():
@@ -52,3 +62,4 @@ def test():
             axes[index].set_title(batch_keys[index])
         plt.tight_layout()  # 调整子图布局，防止重叠
         plt.show()
+
