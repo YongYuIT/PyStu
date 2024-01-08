@@ -56,7 +56,9 @@
 
 # 模型优化
 
-## 原始状况
+## 原始状况（Start Status）
+
+模型：ModelDef，全链接，每层Leatures减半
 
 超参
 ~~~
@@ -65,6 +67,35 @@ learningRate = 0.1
 numEpochs = 20
 ~~~
 
-模型：全链接，每层Leatures减半
+
 
 实验结果：
+![StartStatus.png](OptRecords%2FStartStatus.png)
+
+分析：准确度在低水平稳定徘徊，需要动态变动学习速率
+
+## 优化1: 引入动态学习速率（DynamicLearningRate）
+
+模型：DynamicLRModelDef
+
+超参
+~~~
+batchSize = 100
+learningRate = 0.5
+numEpochs = 20
+~~~
+实验结果：
+![DynamicLearningRate.png](OptRecords%2FDynamicLearningRate.png)
+
+动起来了，但是准确率没有明显改善
+
+## 优化2：这种特征应该是比较多的features，减少模型输入端的features递减层数（LessLevel）
+
+模型：LessLevelModelDef
+
+超参
+~~~
+batchSize = 100
+learningRate = 0.5
+numEpochs = 20
+~~~

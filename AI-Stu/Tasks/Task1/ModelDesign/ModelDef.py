@@ -48,6 +48,8 @@ class ModelDef:
 
     # 模型训练
     def train(self, train_iter, test_iter):
+        num_layers = len(list(self.net.children()))
+        print("current model has levels:", num_layers)
         dictTrainRecords = {}
         for epoch_index in range(self.num_epochs):
             self.train_epoch(train_iter)

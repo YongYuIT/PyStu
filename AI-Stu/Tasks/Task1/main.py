@@ -1,7 +1,7 @@
 from DataStorage import ImagesSaveToTensers as ISTT
 from DataStdRead import ImgClassDataSet as ICDS
 from DataStdRead import ImgClassDataLoader as ICDL
-from ModelDesign import ModelDef as MD
+from ModelDesign import LessLevelModelDef as MD
 from Tools import ShowDict as SD
 import os
 
@@ -16,8 +16,8 @@ batchSize = 100
 train_data, test_data = ICDL.getDataLoader(dataset, batchSize)
 # 定义和训练模型
 # learningRate=0.1意味着模型参数会以当前梯度的一个十分之一的比例进行更新
-learningRate = 0.1
+learningRate = 0.5
 numEpochs = 20
-model = MD.ModelDef(batchSize, learningRate, numEpochs)
+model = MD.LessLevelModelDef(batchSize, learningRate, numEpochs)
 dictTrainRecords = model.train(train_data, test_data)
-SD.showDict("原始状况", "epoch次数", "test集准确性")
+SD.showDict("Start Status", "epoch", "test", dictTrainRecords)
