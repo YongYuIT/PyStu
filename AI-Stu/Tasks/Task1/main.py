@@ -6,7 +6,7 @@ from Tools import ShowDict as SD
 import os
 
 # 读取图片，将图片存储为张量字典
-if os.path.exists(ISTT.allPicDictName):
+if not os.path.exists(ISTT.allPicDictName):
     picRootPath = "pic/"
     ISTT.ImagesSaveToTensers(picRootPath)
 # 由张量字典创建数据集对象，用于模型读取数据
@@ -17,7 +17,7 @@ train_data, test_data = ICDL.getDataLoader(dataset, batchSize)
 # 定义和训练模型
 # learningRate=0.1意味着模型参数会以当前梯度的一个十分之一的比例进行更新
 learningRate = 0.5
-numEpochs = 20
+numEpochs = 60
 model = MD.LessLevelModelDef(batchSize, learningRate, numEpochs)
 dictTrainRecords = model.train(train_data, test_data)
 SD.showDict("Start Status", "epoch", "test", dictTrainRecords)

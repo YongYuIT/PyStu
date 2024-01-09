@@ -53,8 +53,8 @@ class ModelDef:
         dictTrainRecords = {}
         for epoch_index in range(self.num_epochs):
             self.train_epoch(train_iter)
-            correct_rate = self.evaluate(test_iter)
-            print("epoch index-->", epoch_index, "||correct rate-->", correct_rate)
+            correct_rate, loss = self.evaluate(test_iter)
+            print("epoch index-->", epoch_index, "||correct rate-->", correct_rate, "||loss-->", loss)
             dictTrainRecords[epoch_index] = correct_rate
         return dictTrainRecords
 
@@ -72,25 +72,32 @@ class ModelDef:
             loss.mean().backward()
             # 更新模型参数
             self.updater.step()
+        print("do epoch-->", len(train_iter))
 
     # 模型评估，返回正确识别的百分比
     def evaluate(self, test_iter):
         self.net.eval()  # 将模型设置为评估模式
         with torch.no_grad():
             totalSamples = 0
-            notEqualSamples = 0
+            EqualSamples = 0
+            totalLoss = 0
             for y, X in test_iter:
                 y_hat = self.net(X)
                 # print("y_hat-->", y_hat)
                 # print("y-->", y)
                 y_hat_max = y_hat.argmax(axis=1)
                 y_max = y.argmax(axis=1)
-                notEqual = torch.sum(y_hat_max != y_max).item()
+                Equal = torch.sum(y_hat_max == y_max).item()
                 totalSamples += len(y)
-                notEqualSamples += notEqual
-        return 1 - (notEqualSamples / totalSamples)
+                EqualSamples += Equal
+                loss = self.loss(y_hat, y)
+                totalLoss = loss.sum()
+        return EqualSamples / totalSamples, totalLoss / totalSamples
 
 
 def test():
     y_hat = torch.Tensor([[0.1, 0.1, 0.5, 0.1, 0.2], [0.9, 0, 0, 0, 0.1]])
     print(y_hat.argmax(axis=1))
+    a = torch.Tensor([1, 0, 1])
+    b = torch.Tensor([1, 1, 1])
+    print(torch.sum(a == b).item())

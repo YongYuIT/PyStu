@@ -10,7 +10,7 @@ class DynamicLRModelDef(MD.ModelDef):
 
     # 单独的一轮epoch
     def train_epoch(self, train_iter):
-        super().train_epoch(train_iter)
-        self.learning_rate_scheduler.step()
         current_lr = self.updater.param_groups[0]['lr']
         print("current learning rate:", current_lr)
+        super().train_epoch(train_iter)
+        self.learning_rate_scheduler.step()

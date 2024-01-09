@@ -87,7 +87,7 @@ numEpochs = 20
 实验结果：
 ![DynamicLearningRate.png](OptRecords%2FDynamicLearningRate.png)
 
-动起来了，但是准确率没有明显改善
+准确率没有明显改善
 
 ## 优化2：这种特征应该是比较多的features，减少模型输入端的features递减层数（LessLevel）
 
@@ -97,5 +97,18 @@ numEpochs = 20
 ~~~
 batchSize = 100
 learningRate = 0.5
-numEpochs = 20
+numEpochs = 60
 ~~~
+
+实验结果：
+![LessLevel.png](OptRecords%2FLessLevel.png)
+
+这个结果还行
+
+# 实战验证
+
+## 保存和加载模型参数
+
+
+
+## 在验证集上验证模型

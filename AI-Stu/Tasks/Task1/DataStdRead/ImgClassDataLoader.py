@@ -9,10 +9,11 @@ import matplotlib.pyplot as plt
 # 为了提高模型的泛化能力，一个模型训练通常会包含若干个epoch
 def getDataLoader(dataset, batchSize):
     # 定义训练集和测试集的比例
-    train_ratio = 0.8  # 假设80%用于训练集
+    train_ratio = 0.8  # 假设70%用于训练集
     # 根据比例随机划分数据集
     train_size = int(train_ratio * len(dataset))
     test_size = len(dataset) - train_size
+    print("train_size-->", train_size, "||test_size-->", test_size)
     train_dataset, test_dataset = random_split(dataset, [train_size, test_size])
 
     # 使用 DataLoader 加载训练集和测试集
