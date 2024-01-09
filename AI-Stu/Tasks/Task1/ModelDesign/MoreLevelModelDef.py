@@ -2,8 +2,9 @@ from ModelDesign import DynamicLRModelDef as MD
 from torch import nn
 import torch
 
+
 class MoreLevelModelDef(MD.DynamicLRModelDef):
-    def __init__(self, batch_size, learning_rate, num_epochs):
+    def __init__(self, batch_size=0, learning_rate=0, num_epochs=0):
         super().__init__(batch_size, learning_rate, num_epochs)
         self.net = nn.Sequential()
         self.net.append(nn.Flatten())

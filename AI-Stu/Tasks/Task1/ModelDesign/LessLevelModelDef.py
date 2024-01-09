@@ -5,7 +5,7 @@ import torch.optim.lr_scheduler as lr_scheduler
 
 
 class LessLevelModelDef(MD.DynamicLRModelDef):
-    def __init__(self, batch_size, learning_rate, num_epochs):
+    def __init__(self, batch_size=0, learning_rate=0, num_epochs=0):
         super().__init__(batch_size, learning_rate, num_epochs)
         self.net = nn.Sequential(nn.Flatten(),
                                  nn.Linear(10000, 5000),

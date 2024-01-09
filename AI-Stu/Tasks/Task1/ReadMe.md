@@ -109,6 +109,7 @@ numEpochs = 60
 
 ## 保存和加载模型参数
 
+参考：https://zh.d2l.ai/chapter_deep-learning-computation/read-write.html#id3
 
 
 ## 在验证集上验证模型

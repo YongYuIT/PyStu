@@ -11,7 +11,7 @@ class ModelDef:
             nn.init.normal_(m.weight, std=0.01)
 
     # 模型定义
-    def __init__(self, batch_size, learning_rate, num_epochs):
+    def __init__(self, batch_size=0, learning_rate=0, num_epochs=0):
         self.batch_size = batch_size
         self.learning_rate = learning_rate
         self.num_epochs = num_epochs
@@ -93,6 +93,12 @@ class ModelDef:
                 loss = self.loss(y_hat, y)
                 totalLoss = loss.sum()
         return EqualSamples / totalSamples, totalLoss / totalSamples
+
+    def saveModel(self, saveName):
+        torch.save(self.net.state_dict(), saveName)
+
+    def loadModel(self, saveName):
+        self.net.load_state_dict(torch.load(saveName))
 
 
 def test():
