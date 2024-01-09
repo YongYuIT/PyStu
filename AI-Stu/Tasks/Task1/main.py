@@ -17,7 +17,7 @@ train_data, test_data = ICDL.getDataLoader(dataset, batchSize)
 # 定义和训练模型
 # learningRate=0.1意味着模型参数会以当前梯度的一个十分之一的比例进行更新
 learningRate = 0.5
-numEpochs = 5
+numEpochs = 60
 model = MD.LessLevelModelDef(batchSize, learningRate, numEpochs)
 dictTrainRecords = model.train(train_data, test_data)
 SD.showDict("LessLevelModelDef", "epoch", "test", dictTrainRecords)

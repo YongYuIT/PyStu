@@ -18,8 +18,8 @@ base_url = 'https://cn.bing.com/images/search?q=####&first=1'
 
 lua_script = """
 function main(splash)
-    local num_scrolls = 5
-    local scroll_delay = 2.0
+    local num_scrolls = 20
+    local scroll_delay = 3.0
 
     splash:go(splash.args.url)
     splash:wait(2)
