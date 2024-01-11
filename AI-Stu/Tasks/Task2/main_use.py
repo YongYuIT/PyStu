@@ -1,19 +1,22 @@
-from DataPreprocessing import ImageRemoveColor as IRC
+import sys
+
+sys.path.append('../Task1')
 from DataPreprocessing import ImageToSquare as I2S
 from DataPreprocessing import ResizeImage as RI
-from DataStorage import ImagesSaveToTensers as ISTT
-from ModelDesign import LessLevelModelDef as MD
 from DataStdRead import ImgClassDataSet as ICDS
+
+from Data import ImagesSaveToTensers as ISTT
+from ModelDesign import LeNetModelDef as MD
 from PIL import Image
 import matplotlib.pyplot as plt
 import os
 import torch
 
-modelLoad = MD.LessLevelModelDef()
-modelLoad.loadModel("LessLevelModelDef-bak0109")
+modelLoad = MD.LeNetModelDef()
+modelLoad.loadModel("LeNetModelDef_bak0111")
 types = list(ICDS.labelDict.keys())
 
-rootPath = "pic_check"
+rootPath = "../Task1/pic_check"
 fileList = os.listdir(rootPath)
 fileCount = len(fileList)
 # 设置子图的行列数
@@ -30,9 +33,8 @@ with torch.no_grad():
         if os.path.isfile(picFilePath) and picFilePath.endswith(".png"):
             image = Image.open(picFilePath)
             simage = I2S.ImageToSquare(image)
-            rimage = RI.ResizeImage(simage, 100)
-            cimage = IRC.ImageRemoveColor(rimage)
-            x = ISTT.transform(cimage)[0].view(1, 100, 100)
+            rimage = RI.ResizeImage(simage, 128)
+            x = ISTT.transform(rimage).view(1, 3, 128, 128)
             y_hat = modelLoad.net(x)
             type = types[y_hat.argmax(axis=1)]
             print("file-->", picFilePath, "||type-->", type)
