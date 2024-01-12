@@ -35,6 +35,10 @@ class LeNetGPUModelDef(MD.LeNetModelDef):
 
     # 单独的一轮epoch
     def train_epoch(self, train_iter):
+
+        current_lr = self.updater.param_groups[0]['lr']
+        print("current learning rate:", current_lr)
+
         # 将模型设置为训练模式
         self.net.train()
         for y, X in train_iter:
@@ -50,6 +54,8 @@ class LeNetGPUModelDef(MD.LeNetModelDef):
             # 更新模型参数
             self.updater.step()
         print("do epoch on GPU-->", len(train_iter))
+
+        self.learning_rate_scheduler.step()
 
     # 模型评估，返回正确识别的百分比
     def evaluate(self, test_iter):
