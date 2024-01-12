@@ -74,6 +74,61 @@ numEpochs = 60
 
 结果比LessLevelModel稍好一点，错误率14/50
 
+## 在GPU上运算
+
+在系统命令行中运行
+
+~~~
+nvidia-smi
+~~~
+
+可以看到显卡配置
+
+执行代码
+
+~~~
+torch.cuda.device_count()
+~~~
+
+显示GPU数量为0，检查CUDA是否安装正确
+
+在系统命令行中运行
+~~~
+nvcc --version
+~~~
+
+命令不识别，安装CUDA
+
+CUDA（Compute Unified Device Architecture）是由 NVIDIA 开发的并行计算平台和编程模型。它允许开发者使用 NVIDIA 的 GPU（图形处理单元）进行通用目的的并行计算。
+
+下载 cuda-toolkit
+
+https://developer.nvidia.com/cuda-toolkit
+
+在下载界面选择正确的操作系统类型、CPU架构、操作系统版本、安装类型之后，会自动启动下载
+
+CUDA装好之后，nvcc --version也有了信息，运行torch.cuda.device_count()，输出GPU数量还是0
+
+重新安装pytorch
+
+https://pytorch.org/
+
+在“INSTALL PYTORCH”选项中，选择正确的参数配置，自动获取安装命令
+
+~~~
+conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
+~~~
+
+如果速度慢，切换国内的源
+
+~~~
+conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c https://mirrors.aliyun.com/anaconda/cloud/pytorch -c https://mirrors.aliyun.com/anaconda/cloud/nvidia
+~~~
+
+在空白的python中执行这行命令
+
+安装完成之后，再运行torch.cuda.device_count()，就看到输出了1，说明仅有的一个英伟达显卡有了
+
 # 分析两个模型泛化性能
 
 * 是否过拟合
