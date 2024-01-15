@@ -139,7 +139,24 @@ numEpochs = 400
 ~~~
 
 实验结果：
-[LeNetGPUModelDef.py](ModelDesign%2FLeNetGPUModelDef.py)
+![LeNetGPUModelDef.png](OptRecords%2FLeNetGPUModelDef.png)
+
+
+## 对训练集数据进行人工筛选，在高质量数据集上训练
+
+~~~
+picRootPath = "pic_check/"
+~~~
+
+超参
+~~~
+batchSize = 400
+learningRate = 0.8
+numEpochs = 400
+~~~
+
+实验结果：
+![LeNetGPUModelDef-PicCheck.png](OptRecords%2FLeNetGPUModelDef-PicCheck.png)
 
 
 # 分析两个模型泛化性能

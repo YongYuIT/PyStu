@@ -11,7 +11,7 @@ import os
 
 # 读取图片，将图片存储为张量字典
 if not os.path.exists(ISTT.allPicDictName):
-    picRootPath = "pic/"
+    picRootPath = "pic_check/"
     ISTT.ImagesSaveToTensers(picRootPath)
 # 由张量字典创建数据集对象，用于模型读取数据
 dataset = ICDS.ImgClassDataSet(ISTT.allPicDictName)
