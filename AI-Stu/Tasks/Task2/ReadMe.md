@@ -129,6 +129,19 @@ conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c https://mirror
 
 安装完成之后，再运行torch.cuda.device_count()，就看到输出了1，说明仅有的一个英伟达显卡有了
 
+将模型放在GPU上训练发现速度快了很多
+
+超参
+~~~
+batchSize = 400
+learningRate = 0.8
+numEpochs = 400
+~~~
+
+实验结果：
+[LeNetGPUModelDef.py](ModelDesign%2FLeNetGPUModelDef.py)
+
+
 # 分析两个模型泛化性能
 
 * 是否过拟合

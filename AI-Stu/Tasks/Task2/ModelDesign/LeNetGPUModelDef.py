@@ -31,7 +31,7 @@ class LeNetGPUModelDef(MD.LeNetModelDef):
         # 定义优化器
         self.updater = torch.optim.SGD(self.net.parameters(), self.learning_rate)
         # 每5个epoch学习率乘以0.5
-        self.learning_rate_scheduler = lr_scheduler.StepLR(self.updater, step_size=5, gamma=0.5)
+        self.learning_rate_scheduler = lr_scheduler.StepLR(self.updater, step_size=10, gamma=0.9)
 
     # 单独的一轮epoch
     def train_epoch(self, train_iter):

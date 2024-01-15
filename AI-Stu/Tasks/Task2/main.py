@@ -16,11 +16,11 @@ if not os.path.exists(ISTT.allPicDictName):
 # 由张量字典创建数据集对象，用于模型读取数据
 dataset = ICDS.ImgClassDataSet(ISTT.allPicDictName)
 # 读取数据集，划分训练、测试集
-batchSize = 100
+batchSize = 400
 train_data, test_data = ICDL.getDataLoader(dataset, batchSize)
 # 定义和训练模型
 learningRate = 0.8
-numEpochs = 60
+numEpochs = 400
 model = MD.LeNetGPUModelDef(batchSize, learningRate, numEpochs)
 dictTrainRecords = model.train(train_data, test_data)
 SD.showDict("LeNetGPUModelDef", "epoch", "test", dictTrainRecords)
