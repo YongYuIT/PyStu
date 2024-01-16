@@ -6,7 +6,7 @@ import numpy as np
 
 def ResizeImage(image, tagSize):
     target_size = (tagSize, tagSize)
-    return image.resize(target_size, Image.ANTIALIAS)
+    return image.resize(target_size, Image.LANCZOS)
 
 
 def test():

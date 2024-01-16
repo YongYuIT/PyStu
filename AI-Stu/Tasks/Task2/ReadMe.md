@@ -158,6 +158,9 @@ numEpochs = 400
 实验结果：
 ![LeNetGPUModelDef-PicCheck.png](OptRecords%2FLeNetGPUModelDef-PicCheck.png)
 
+在使用Spider-Stu\AI_Task1_DataPrepare\Step3_DownloadValidationData，从另一个数据源下载验证数据
+
+通过批量验证，错误率在44.5%
 
 # 分析两个模型泛化性能
 
