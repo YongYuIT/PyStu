@@ -6,14 +6,14 @@ from DataPreprocessing import ResizeImage as RI
 from DataStdRead import ImgClassDataSet as ICDS
 
 from Data import ImagesSaveToTensers as ISTT
-from ModelDesign import LeNetModelDef as MD
+from ModelDesign import LeNetGPUModelDef as MD
 from PIL import Image
 import os
 import torch
 import matplotlib.pyplot as plt
 
 # 加载模型-----------------------------------------------------------------------------------------
-modelLoad = MD.LeNetModelDef()
+modelLoad = MD.LeNetGPUModelDef()
 modelLoad.loadModel("LeNetGPUModelDef-check-bak0115")
 types = list(ICDS.labelDict.keys())
 
@@ -40,6 +40,7 @@ for subPath in subPaths:
 modelLoad.net.eval()  # 将模型设置为评估模式
 with torch.no_grad():
     X = torch.stack(imgTensorList, dim=0)
+    X = X.to('cuda')
     y_hat = modelLoad.net(X)
 
 # 统计验证结果-----------------------------------------------------------------------------------------
@@ -69,7 +70,6 @@ for imgIndex in errorDict.keys():
     axes[row, col].imshow(npImage)
     axes[row, col].set_title(errorType + "->" + trueType)
     index = index + 1
-
 
 plt.tight_layout()  # 调整子图布局，防止重叠
 plt.show()
