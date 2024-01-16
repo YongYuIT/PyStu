@@ -1,7 +1,7 @@
 import Step1_CreatePathTree as S1
 import requests
 from bs4 import BeautifulSoup
-import uuid
+import Tools
 import base64
 
 searchNames = ['小狗', '猪', '小鸟', '美女', '毒蛇']
@@ -55,15 +55,6 @@ params = {
 }
 
 
-def genNewID():
-    random_uuid = uuid.uuid4()
-    return str(random_uuid)
-
-
-def getNewPath(subPath, name):
-    return S1.rootPath + "/" + subPath + "/" + name + ".png"
-
-
 def DownloadPicBySubPath(subPath):
     searchName = nameDic[subPath]
     url = base_url.replace("####", searchName)
@@ -79,16 +70,16 @@ def DownloadPicBySubPath(subPath):
         if image_url.startswith("http"):
             response = requests.get(image_url)
             if response.status_code == 200:
-                fileID = genNewID()
-                imageFile = getNewPath(subPath, fileID)
+                fileID = Tools.genNewID()
+                imageFile = Tools.getNewPath(subPath, fileID)
                 with open(imageFile, 'wb') as file:
                     file.write(response.content)
                 all_ids += fileID + '\n'
         else:
             pic_base64 = image_url.split(",")[1];
             image_data = base64.b64decode(pic_base64)
-            fileID = genNewID()
-            imageFile = getNewPath(subPath, fileID)
+            fileID = Tools.genNewID()
+            imageFile = Tools.getNewPath(subPath, fileID)
             with open(imageFile, 'wb') as file:
                 file.write(image_data)
             all_ids += fileID + '\n'
