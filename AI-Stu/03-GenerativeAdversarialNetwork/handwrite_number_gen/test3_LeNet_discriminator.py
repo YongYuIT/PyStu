@@ -42,7 +42,7 @@ class LeNetModelDef(nn.Module):
         # 定义优化器
         self.optimizer = torch.optim.SGD(self.parameters(), self.learning_rate)
         # 定义损失函数
-        self.loss = nn.CrossEntropyLoss(reduction='none')
+        self.loss = nn.CrossEntropyLoss()
         # 定义学习速率修改器
         self.learning_rate_scheduler = lr_scheduler.StepLR(self.optimizer, step_size=20, gamma=0.5)
 
@@ -76,7 +76,7 @@ class LeNetModelDef(nn.Module):
             # 将梯度矩阵归零，避免梯度积累
             self.optimizer.zero_grad()
             # 后向传播，计算本次随机小批量的梯度
-            loss.mean().backward()
+            loss.backward()
             # 根据计算的梯度矩阵，更新模型参数
             self.optimizer.step()
         # 更新学习速率
@@ -95,21 +95,19 @@ class LeNetModelDef(nn.Module):
             for X, y in test_iter:
                 # 等价于 y_hat = self.forward(X)
                 y_hat = self(X)
-                y_hat_max = y_hat.argmax(axis=1)
-                equalNum = torch.sum(y_hat_max == y).item()
-                totalSamples += len(y)
-                equalSamples += equalNum
+                y = F.one_hot(y, 10).float()
                 loss = self.loss(y_hat, y)
-                totalLoss += loss.sum()
-        return equalSamples / totalSamples, totalLoss / totalSamples
+                totalLoss += loss.item()
+                totalSamples += y.size(0)
+        return totalLoss / totalSamples
 
     def train_model(self, train_iter, test_iter):
         dictTrainRecords = {}
         for epoch_index in range(self.num_epochs):
             self.train_epoch(train_iter)
-            correct_rate, avgLoss = self.evaluate(test_iter)
-            print("epoch index-->", epoch_index, "||correct rate-->", correct_rate, "||loss-->", avgLoss)
-            dictTrainRecords[epoch_index] = correct_rate
+            avgLoss = self.evaluate(test_iter)
+            print("epoch index-->", epoch_index, "||avgLoss-->", avgLoss)
+            dictTrainRecords[epoch_index] = avgLoss
         return dictTrainRecords
 
 
