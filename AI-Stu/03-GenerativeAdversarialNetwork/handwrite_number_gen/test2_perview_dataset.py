@@ -44,7 +44,10 @@ fig, axes = plt.subplots(num_rows, num_cols, figsize=(10, 8), subplot_kw={'aspec
 for index in range(simple_size):
     col = index % num_cols
     row = int(index / num_cols)
-    npImage = view_batch_X[index].permute(1, 2, 0).numpy()
+    tensor_view = view_batch_X[index]
+    print("max-->", torch.max(tensor_view).item())
+    print("min-->", torch.min(tensor_view).item())
+    npImage = tensor_view.permute(1, 2, 0).numpy()
     axes[row, col].imshow(npImage, cmap='gray')
     axes[row, col].set_title(view_batch_Y[index].item())
 plt.tight_layout()  # 调整子图布局，防止重叠

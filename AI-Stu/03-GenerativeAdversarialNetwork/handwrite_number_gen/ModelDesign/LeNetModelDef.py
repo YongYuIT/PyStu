@@ -26,7 +26,9 @@ class LeNetModelDef(nn.Module):
         self._modules['second_pool'] = nn.AvgPool2d(kernel_size=2, stride=2)
         self._modules['flatten'] = nn.Flatten()
         self._modules['first_full_conn'] = nn.Linear(400, 120)
+        self._modules['first_fc_active'] = nn.ReLU()
         self._modules['second_full_conn'] = nn.Linear(120, 84)
+        self._modules['second_fc_active'] = nn.ReLU()
         self._modules['third_full_conn'] = nn.Linear(84, 10)
         # 定义损失函数
         self.loss = nn.CrossEntropyLoss()
@@ -38,7 +40,7 @@ class LeNetModelDef(nn.Module):
         # 定义优化器
         self.optimizer = torch.optim.SGD(self.parameters(), self.learning_rate)
         # 定义学习速率修改器
-        self.learning_rate_scheduler = lr_scheduler.StepLR(self.optimizer, step_size=10, gamma=0.8)
+        self.learning_rate_scheduler = lr_scheduler.StepLR(self.optimizer, step_size=20, gamma=0.8)
 
     def forward(self, X):
         X_1_1 = self._modules['first_conv'](X)
@@ -49,8 +51,10 @@ class LeNetModelDef(nn.Module):
         X_2_3 = self._modules['second_pool'](X_2_2)
         X_F = self._modules['flatten'](X_2_3)
         X_FU_1 = self._modules['first_full_conn'](X_F)
-        X_FU_2 = self._modules['second_full_conn'](X_FU_1)
-        y = self._modules['third_full_conn'](X_FU_2)
+        X_FU_1_A = self._modules['first_fc_active'](X_FU_1)
+        X_FU_2 = self._modules['second_full_conn'](X_FU_1_A)
+        X_FU_2_A = self._modules['second_fc_active'](X_FU_2)
+        y = self._modules['third_full_conn'](X_FU_2_A)
         return y
 
     # 单独的一轮epoch

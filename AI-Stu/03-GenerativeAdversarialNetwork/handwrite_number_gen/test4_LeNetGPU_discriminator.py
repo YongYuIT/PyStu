@@ -29,7 +29,7 @@ test_dataset = MNIST(root='./data', train=False, download=True, transform=transf
 test_loader = DataLoader(test_dataset, batch_size=batchSize, shuffle=False)
 
 learningRate = 0.3
-numEpochs = 200
+numEpochs = 400
 model = MD.LeNetGPUModelDef(learningRate, numEpochs)
 model.initModel()
 dictTrainRecords = model.train_model(train_loader, test_loader)
