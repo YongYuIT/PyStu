@@ -31,3 +31,9 @@
 * 第一全连接层，400-->120，ReLU激活
 * 第二全连接层，120-->84，ReLU激活
 * 第三全连接层，84-->10，ReLU激活
+
+判别器定义和训练见：test3和test4
+
+训练结果：
+
+![LeNetGPUModelDef.png](ReadMePic%2FLeNetGPUModelDef.png)

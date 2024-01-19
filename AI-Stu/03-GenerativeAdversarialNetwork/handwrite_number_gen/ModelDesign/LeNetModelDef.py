@@ -28,15 +28,17 @@ class LeNetModelDef(nn.Module):
         self._modules['first_full_conn'] = nn.Linear(400, 120)
         self._modules['second_full_conn'] = nn.Linear(120, 84)
         self._modules['third_full_conn'] = nn.Linear(84, 10)
+        # 定义损失函数
+        self.loss = nn.CrossEntropyLoss()
 
+    # 由于这些参数跟具体运算设备相关，所以需要在运算设备确定之后才能初始化
+    def initModel(self):
         # 定义模型初始化方法（即规定学习起点）
         self.apply(LeNetModelDef.init_W)
         # 定义优化器
         self.optimizer = torch.optim.SGD(self.parameters(), self.learning_rate)
-        # 定义损失函数
-        self.loss = nn.CrossEntropyLoss()
         # 定义学习速率修改器
-        self.learning_rate_scheduler = lr_scheduler.StepLR(self.optimizer, step_size=20, gamma=0.5)
+        self.learning_rate_scheduler = lr_scheduler.StepLR(self.optimizer, step_size=10, gamma=0.8)
 
     def forward(self, X):
         X_1_1 = self._modules['first_conv'](X)
@@ -94,7 +96,7 @@ class LeNetModelDef(nn.Module):
                 equalSamples += equal_num
         return totalLoss / totalSamples, equalSamples / totalSamples
 
-    # 小批量验证
+    # 小批量评估
     def evaluate_batch(self, X, y):
         # 等价于 y_hat = self.forward(X)
         y_hat = self(X)
@@ -112,5 +114,11 @@ class LeNetModelDef(nn.Module):
             self.train_epoch(train_iter)
             avgLoss, correct = self.evaluate_model(test_iter)
             print("epoch index-->", epoch_index, "||avgLoss-->", avgLoss, "||correct-->", correct)
-            dictTrainRecords[epoch_index] = avgLoss
+            dictTrainRecords[epoch_index] = [avgLoss * 1000, correct]
         return dictTrainRecords
+
+    def saveModel(self, saveName):
+        torch.save(self.state_dict(), saveName)
+
+    def loadModel(self, saveName):
+        self.load_state_dict(torch.load(saveName))
