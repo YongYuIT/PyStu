@@ -7,7 +7,7 @@ import sys
 sys.path.append('../../Tasks/Task1')
 from Tools import ShowDict as SD
 
-learningRate = 0.00001
+learningRate = 0.00001 # 模型数据必须从较小设置起，否则容易梯度爆炸出现nan
 numEpochs = 100
 
 modelLoad = LN_MD.LeNetGPUModelDef()
