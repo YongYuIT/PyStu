@@ -95,18 +95,23 @@ class LeNetModelDef(nn.Module):
             for X, y in test_iter:
                 # 等价于 y_hat = self.forward(X)
                 y_hat = self(X)
+                # 计算准确率
+                y_hat_max = y_hat.argmax(axis=1)
+                equal_num = torch.sum(y_hat_max == y).item()
+                # 计算loss
                 y = F.one_hot(y, 10).float()
                 loss = self.loss(y_hat, y)
                 totalLoss += loss.item()
                 totalSamples += y.size(0)
-        return totalLoss / totalSamples
+                equalSamples += equal_num
+        return totalLoss / totalSamples, equalSamples / totalSamples
 
     def train_model(self, train_iter, test_iter):
         dictTrainRecords = {}
         for epoch_index in range(self.num_epochs):
             self.train_epoch(train_iter)
-            avgLoss = self.evaluate(test_iter)
-            print("epoch index-->", epoch_index, "||avgLoss-->", avgLoss)
+            avgLoss, correct = self.evaluate(test_iter)
+            print("epoch index-->", epoch_index, "||avgLoss-->", avgLoss, "||correct-->", correct)
             dictTrainRecords[epoch_index] = avgLoss
         return dictTrainRecords
 
