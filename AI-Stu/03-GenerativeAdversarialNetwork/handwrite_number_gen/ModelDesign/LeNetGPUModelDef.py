@@ -37,3 +37,17 @@ class LeNetGPUModelDef(CPUModel):
                 totalLoss += loss
                 equalSamples += equal_num
         return totalLoss / totalSamples, equalSamples / totalSamples
+
+    # 作为判别器使用，判别Loss
+    def lossForJustify(self, y_image):
+        # y_class：n*10
+        y_class = self(y_image)
+        # print("----y_class ( LenNetModel ) max-->", torch.max(y_class).item(), "||min-->", torch.min(y_class).item())
+        # print("----y_class", y_class)
+        # 选出n张图片中各自最像的分量
+        y_class_max_index = y_class.argmax(axis=1)
+        # 将这个最像的值取出来，作为相似度
+        y_class_max = y_class[torch.arange(y_class.size(0)), y_class_max_index]
+        # 取负数代表不相似度
+        y_class_max = (-y_class_max)
+        return y_class_max

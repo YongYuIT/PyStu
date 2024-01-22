@@ -17,6 +17,7 @@ class FCGenModelDef(nn.Module):
         self.LenNetModel = LenNetModel
         self.learning_rate = learning_rate
         self.num_epochs = num_epochs
+        self.stop_loss = -0.95  # 定义一个学习终点
         # 模型各层定义，_modules是一个字典对象
         self._modules['first_full_conn'] = nn.Linear(100, 28 * 28)
         self._modules['first_fc_active'] = nn.ReLU()
@@ -27,18 +28,9 @@ class FCGenModelDef(nn.Module):
     # y_hat: n * 1 * 28 * 28
     # 返回n张生成图片的平均相似度的负数即：平均不相似度
     def loss(self, y_hat):
-        # y_class：n*10
-        y_class = self.LenNetModel(y_hat)
-        # print("----y_class ( LenNetModel ) max-->", torch.max(y_class).item(), "||min-->", torch.min(y_class).item())
-        # print("----y_class", y_class)
-        # 选出n张图片中各自最像的分量
-        y_class_max_index = y_class.argmax(axis=1)
-        # 将这个最像的值取出来，作为相似度
-        y_class_max = y_class[torch.arange(y_class.size(0)), y_class_max_index]
-        # 取负数代表不相似度
-        y_class_max = (-y_class_max)
+        y_class_max = self.LenNetModel.lossForJustify(y_hat)
         # 不相似度均值作为模型损失，不相似度越低越好
-        y_class_avg = y_class_max.sum() / y_class.size(0)
+        y_class_avg = y_class_max.sum() / y_hat.size(0)
         return y_class_avg
 
     # X: n * 100
@@ -49,7 +41,11 @@ class FCGenModelDef(nn.Module):
         # 将取值限制在-1到1之间
         y_std = torch.clamp(y, -1., 1.)
         # 重建图片结构
-        y_img = y_std.view(y_std.size(0), 1, 28, 28)
+        y_img = None
+        if y_std.dim() < 2:
+            y_img = y_std.view(1, 28, 28)
+        else:
+            y_img = y_std.view(y_std.size(0), 1, 28, 28)
 
         ########################测试，需删除
         # print("----X (noise ) max-->", torch.max(X).item(), "||min-->", torch.min(X).item(),
@@ -65,7 +61,7 @@ class FCGenModelDef(nn.Module):
         # 定义优化器
         self.optimizer = torch.optim.SGD(self.parameters(), self.learning_rate)
         # 定义学习速率修改器
-        self.learning_rate_scheduler = lr_scheduler.StepLR(self.optimizer, step_size=20, gamma=0.8)
+        self.learning_rate_scheduler = lr_scheduler.StepLR(self.optimizer, step_size=10, gamma=0.8)
 
     # inputX：1000 * 1000 * 100
     # inputTextX：500 * 1000 * 100
@@ -76,6 +72,8 @@ class FCGenModelDef(nn.Module):
             avgLoss = self.evaluate_model(inputTestX)
             print("epoch index-->", epoch_index, "||avgLoss-->", avgLoss)
             dictTrainRecords[epoch_index] = [avgLoss]
+            if avgLoss < self.stop_loss:
+                break
         return dictTrainRecords
 
     # 单独的一轮epoch，inputX：1000*1000*100
