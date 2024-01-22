@@ -83,3 +83,5 @@ for justParams in self.justifyModel.parameters():
 
 这样改进之后，又遇到了一个新问题：生成器loss始终难以下降
 
+原因：判别器一开始就过于强大，应该将判别器和生成器一起训练，相互博弈
+
