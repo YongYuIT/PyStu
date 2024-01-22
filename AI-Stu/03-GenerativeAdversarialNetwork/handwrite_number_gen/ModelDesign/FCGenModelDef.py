@@ -21,10 +21,11 @@ class FCGenModelDef(nn.Module):
             for justParams in self.justifyModel.parameters():
                 justParams.requires_grad = False
         # 模型各层定义，_modules是一个字典对象
-        self._modules['first_full_conn'] = nn.Linear(10, 28 * 28)
-        self._modules['first_fc_active'] = nn.ReLU()
-        self._modules['second_full_conn'] = nn.Linear(28 * 28, 28 * 28)
-        self._modules['second_fc_active'] = nn.ReLU()
+        self._modules['first_full_conn'] = nn.Linear(100, 200)
+        self._modules['first_fc_active'] = nn.LeakyReLU(0.02)
+        self._modules['normal'] = nn.LayerNorm(200)
+        self._modules['second_full_conn'] = nn.Linear(200, 28 * 28)
+        self._modules['second_fc_active'] = nn.Sigmoid()
         # 放到GPU运算
         self.to(torch.cuda.current_device())
 
@@ -40,22 +41,19 @@ class FCGenModelDef(nn.Module):
     def forward(self, X):
         X_1 = self._modules['first_full_conn'](X)
         X_1_V = self._modules['first_fc_active'](X_1)
-        X_2 = self._modules['second_full_conn'](X_1_V)
+        X_N = self._modules['normal'](X_1_V)
+        X_2 = self._modules['second_full_conn'](X_N)
         y = self._modules['second_fc_active'](X_2)
-        # 将取值限制在-1到1之间
-        y_std = torch.clamp(y, -1., 1.)
         # 重建图片结构
         y_img = None
-        if y_std.dim() < 2:
-            y_img = y_std.view(1, 28, 28)
+        if y.dim() < 2:
+            y_img = y.view(1, 28, 28)
         else:
-            y_img = y_std.view(y_std.size(0), 1, 28, 28)
-
+            y_img = y.view(y.size(0), 1, 28, 28)
         ########################测试，需删除
         # print("----X (noise ) max-->", torch.max(X).item(), "||min-->", torch.min(X).item(),
         #       "----y_hat (image ) max-->", torch.max(y_img).item(), "||min-->", torch.min(y_img).item())
         ########################
-
         return y_img
 
     # 由于这些参数跟具体运算设备相关，所以需要在运算设备确定之后才能初始化

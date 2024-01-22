@@ -14,9 +14,9 @@ model = FCG_MD.FCGenModelDef(modelLoad, -30, 10000)
 model.initModel()
 
 # inputX = torch.normal(0, 1, (1000, 1000, 100))
-inputX = torch.randint(1, 100, (100, 1000, 10)).float()
+inputX = torch.rand(1000, 1000, 100)
 # inputTestX = torch.normal(0, 1, (500, 1000, 100))
-inputTestX = torch.randint(1, 100, (50, 1000, 10)).float()
+inputTestX = torch.rand(300, 1000, 100)
 
 dictTrainRecords = model.train_model(inputX, inputTestX)
 
