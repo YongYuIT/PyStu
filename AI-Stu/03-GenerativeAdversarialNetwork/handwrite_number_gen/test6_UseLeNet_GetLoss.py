@@ -3,7 +3,6 @@
 import torchvision.transforms as transforms
 from torchvision.datasets import MNIST
 from torch.utils.data import DataLoader
-from ModelDesign import FCGenModelDef as FCG_MD
 import torch
 import matplotlib.pyplot as plt
 from ModelDesign import LeNetGPUModelDef as LN_MD
@@ -39,10 +38,6 @@ for batch_X, batch_Y in test_loader:
 modelLoadLN = LN_MD.LeNetGPUModelDef()
 modelLoadLN.loadModel("LeNetGPUModelDef")
 
-# 加载生成器模型
-modelLoad = FCG_MD.FCGenModelDef(modelLoadLN)
-modelLoad.loadModel("FCGenModelDef")
-
 # 设置子图的行列数
 simple_size = view_batch_X.size(0)
 num_cols = 10  # 列
@@ -50,9 +45,9 @@ num_rows = int(simple_size / num_cols) + 1  # 行
 # 创建子图并显示图片
 fig, axes = plt.subplots(num_rows, num_cols, figsize=(10, 8), subplot_kw={'aspect': 'auto'})  # 调整图像大小
 
-modelLoad.eval()
+modelLoadLN.eval()
 with torch.no_grad():
-    loss = modelLoad.lossTensor(view_batch_X.to('cuda'))
+    loss = modelLoadLN.lossForJustify(view_batch_X.to('cuda'))
     loss = loss.to('cpu')
     for index in range(view_batch_X.size(0)):
         col = index % num_cols

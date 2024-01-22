@@ -8,7 +8,7 @@ JustifyModel = LN_MD.LeNetGPUModelDef()
 JustifyModel.loadModel("LeNetGPUModelDef")
 
 # 加载生成器模型
-GenModel = FCG_MD.FCGenModelDef(JustifyModel)
+GenModel = FCG_MD.FCGenModelDef(None)
 GenModel.loadModel("FCGenModelDef")
 
 # 设置子图的行列数
@@ -23,7 +23,7 @@ GenModel.eval()
 with torch.no_grad():
     inputX = torch.normal(0, 1, (simple_size, 100)).to('cuda')
     genImgs = GenModel(inputX)
-    loss = GenModel.lossTensor(genImgs)
+    loss = JustifyModel.lossForJustify(genImgs)
     genImgs = genImgs.to('cpu')
     loss = loss.to('cpu')
     for index in range(genImgs.size(0)):

@@ -1,6 +1,5 @@
 from torch import nn
 import torch
-import torch.optim.lr_scheduler as lr_scheduler
 
 
 class FCGenModelDef(nn.Module):
@@ -11,24 +10,28 @@ class FCGenModelDef(nn.Module):
         if type(m) == nn.Linear:
             nn.init.normal_(m.weight, std=0.01)
 
-    def __init__(self, LenNetModel, learning_rate=0., num_epochs=0):
+    def __init__(self, justifyModel, stop_loss, max_epoch):
         super().__init__()
+        self.stop_loss = stop_loss  # 定义一个学习终点
+        self.max_epoch = max_epoch
         # 保存超参
-        self.LenNetModel = LenNetModel
-        self.learning_rate = learning_rate
-        self.num_epochs = num_epochs
-        self.stop_loss = -0.95  # 定义一个学习终点
+        self.justifyModel = justifyModel
+        # 判别器模型参数不参与update
+        if justifyModel != None:
+            for justParams in self.justifyModel.parameters():
+                justParams.requires_grad = False
         # 模型各层定义，_modules是一个字典对象
-        self._modules['first_full_conn'] = nn.Linear(100, 28 * 28)
+        self._modules['first_full_conn'] = nn.Linear(10, 28 * 28)
         self._modules['first_fc_active'] = nn.ReLU()
         self._modules['second_full_conn'] = nn.Linear(28 * 28, 28 * 28)
+        self._modules['second_fc_active'] = nn.ReLU()
         # 放到GPU运算
         self.to(torch.cuda.current_device())
 
     # y_hat: n * 1 * 28 * 28
     # 返回n张生成图片的平均相似度的负数即：平均不相似度
     def loss(self, y_hat):
-        y_class_max = self.LenNetModel.lossForJustify(y_hat)
+        y_class_max = self.justifyModel.lossForJustify(y_hat)
         # 不相似度均值作为模型损失，不相似度越低越好
         y_class_avg = y_class_max.sum() / y_hat.size(0)
         return y_class_avg
@@ -36,8 +39,9 @@ class FCGenModelDef(nn.Module):
     # X: n * 100
     def forward(self, X):
         X_1 = self._modules['first_full_conn'](X)
-        X_1_v = self._modules['first_fc_active'](X_1)
-        y = self._modules['second_full_conn'](X_1_v)
+        X_1_V = self._modules['first_fc_active'](X_1)
+        X_2 = self._modules['second_full_conn'](X_1_V)
+        y = self._modules['second_fc_active'](X_2)
         # 将取值限制在-1到1之间
         y_std = torch.clamp(y, -1., 1.)
         # 重建图片结构
@@ -59,21 +63,20 @@ class FCGenModelDef(nn.Module):
         # 定义模型初始化方法（即规定学习起点）
         self.apply(FCGenModelDef.init_W)
         # 定义优化器
-        self.optimizer = torch.optim.SGD(self.parameters(), self.learning_rate)
-        # 定义学习速率修改器
-        self.learning_rate_scheduler = lr_scheduler.StepLR(self.optimizer, step_size=10, gamma=0.8)
+        self.optimizer = torch.optim.SGD(self.parameters(), lr=0.8, momentum=0.9)
 
     # inputX：1000 * 1000 * 100
     # inputTextX：500 * 1000 * 100
     def train_model(self, inputX, inputTestX):
         dictTrainRecords = {}
-        for epoch_index in range(self.num_epochs):
+        avgLoss = 0
+        epoch_index = 0
+        while avgLoss < self.stop_loss or epoch_index < self.max_epoch:
             self.train_epoch(inputX)
             avgLoss = self.evaluate_model(inputTestX)
+            epoch_index += 1
             print("epoch index-->", epoch_index, "||avgLoss-->", avgLoss)
             dictTrainRecords[epoch_index] = [avgLoss]
-            if avgLoss < self.stop_loss:
-                break
         return dictTrainRecords
 
     # 单独的一轮epoch，inputX：1000*1000*100
@@ -85,8 +88,6 @@ class FCGenModelDef(nn.Module):
         for index in range(inputX.size(0)):
             X = inputX[index].to('cuda')
             self.train_batch(X)
-        # 更新学习速率
-        self.learning_rate_scheduler.step()
 
     # 单独的一次随机小批量，X：1000*100
     def train_batch(self, X):
