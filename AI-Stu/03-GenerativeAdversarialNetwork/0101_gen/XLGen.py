@@ -64,40 +64,45 @@ def testTrain():
     dictTrainRecords = {}
     Disc = XLDisc()
     Gen = XLGen()
+
+    currentTrainSize = 100
+    # 生成器伪造数据的随机种子恒定
+    # 这个种子也用于生成器训练
+    g_train_data_seed = torch.rand(currentTrainSize, 1)
+
     for index in range(1000):
-        currentTrainSize = 100
         epochNum = 10
         # 先用 currentTrainSize 个样本训练鉴别器，训练 epochNum/2 轮
         train_data_set = XLDataSet(currentTrainSize, 0.5)
         train_loader = DataLoader(train_data_set, batch_size=(currentTrainSize))
         Disc.trainModel(int(epochNum / 2), train_loader)
         # 再用 currentTrainSize 个生成样本训练鉴别器，训练 epochNum/2 轮
-        g_train_data = Gen(torch.rand(currentTrainSize, 1)).detach()
+        g_train_data_set = Gen(g_train_data_seed).detach()
         g_train_loader = [
             (
-                g_train_data,
+                g_train_data_set,
                 torch.full((currentTrainSize,), 0, dtype=torch.float)
             )
         ]
         Disc.trainModel(int(epochNum / 2), g_train_loader)
         # 最后用 currentTrainSize 个样本训练生成器，训练 epochNum 轮
         for epoch_index in range(epochNum):
-            Gen.trainModel(Disc, torch.rand(currentTrainSize, 1),
+            Gen.trainModel(Disc, g_train_data_seed,
                            torch.full((currentTrainSize, 1), 1, dtype=torch.float)
                            )
         # 每次博弈完成，输出生成器效率
         Gen.netWork.eval()
         with torch.no_grad():
-            gen_test_data = Gen(torch.rand(300, 1)).detach()
+            gen_test_data = Gen(torch.rand(100, 1)).detach()
             okSum = 0
             for indexGen in range(gen_test_data.size(0)):
                 xl = gen_test_data[indexGen]
                 if checkSampleGPU(xl):
                     okSum += 1
             okRate = okSum / gen_test_data.size(0)
-            # print("index-->", index, " || current rate-->", okRate)
+            print("index-->", index, " || current rate-->", okRate)
             dictTrainRecords[index] = [okRate]
-    showDict("XLDisc", dictTrainRecords, 'epochTimes', ['okRate'])
+    showDict("XLGen", dictTrainRecords, 'epochTimes', ['okRate'])
 
 
 testTrain()
