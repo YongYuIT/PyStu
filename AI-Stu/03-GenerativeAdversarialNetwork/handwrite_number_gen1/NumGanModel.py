@@ -11,6 +11,8 @@
 import torch
 from torch import nn
 
+from ShowDict import showDict
+
 
 class NumGanModel(nn.Module):
     def __init__(self):
@@ -39,10 +41,13 @@ class NumGanModel(nn.Module):
         # 定义两个模型的优化器
         self.DiscOptimiser = torch.optim.SGD(self.DiscModel.parameters(), lr=0.01)
         self.GenOptimiser = torch.optim.SGD(self.GenModel.parameters(), lr=0.01)
+        # 模型训练记录
+        self.record = {}
 
     def TrainModel(self, num_epochs, train_iter):
         for epoch_index in range(num_epochs):
             self.TrainEpoch(train_iter)
+        showDict("NumGanModel", self.record, "barch times", ["loss_disc", "loss_gen"])
 
     def TrainEpoch(self, train_iter):
         self.DiscModel.train()
@@ -72,5 +77,5 @@ class NumGanModel(nn.Module):
             loss_gen = self.DiscLoss(g_train_tags, g_train_tags_std)
             self.GenOptimiser.zero_grad()
             loss_gen.backward()
-
+            self.record[len(self.record)] = [loss_disc.item(), loss_gen.item()]
             self.GenOptimiser.step()
