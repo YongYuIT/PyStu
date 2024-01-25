@@ -3,8 +3,9 @@ from matplotlib import pyplot as plt
 from torch.utils.data import DataLoader
 
 from NumDataSet import NumDataSet
-from NumGanModel import NumGanModel
 import torchvision.transforms as transforms
+
+from NumGanModel1 import NumGanModel1
 
 # 定义数据变换
 transform = transforms.Compose([
@@ -14,10 +15,10 @@ transform = transforms.Compose([
 
 # 加载真实数据集
 true_dataset = NumDataSet(root='./data', train=True, download=True, transform=transform)
-true_dataloader = DataLoader(true_dataset, batch_size=2, shuffle=True)
+true_dataloader = DataLoader(true_dataset, batch_size=1, shuffle=True)
 
 # 训练轮次，数据集上全部训练一遍为一轮
-Gan = NumGanModel()
+Gan = NumGanModel1()
 train_times = 1
 
 for train_index in range(train_times):
