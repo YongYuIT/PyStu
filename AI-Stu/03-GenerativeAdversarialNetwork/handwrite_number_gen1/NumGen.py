@@ -36,6 +36,7 @@ class NumGen(nn.Module):
         desc = Desc(y_hat)
         # 计算鉴别器损失
         dLoss = Desc.lossFunc(desc, y)
+        # print('dloss-->', dLoss.item())
         self.optimiser.zero_grad()
         # 由于dLoss的计算图中包含鉴别器的forward，所以backward的时候会导致鉴别器中的模型梯度重新计算
         # 但是由于optimiser里面不包含鉴别器的模型参数，所以这些参数不会被更新

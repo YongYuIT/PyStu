@@ -1,7 +1,7 @@
 # 将一定比例的生成数据和真实数据混合的数据集
 import torch
 import torchvision.transforms as transforms
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Subset
 import matplotlib.pyplot as plt
 
 from NumDataSet import NumDataSet
@@ -34,15 +34,15 @@ def testView():
     ])
     # 准备生成器伪造的数据
     Gen = NumGen()
-    g_data_seed = torch.rand(10000, 1)
+    g_data_seed = torch.rand(30000, 1)
     g_data_set = Gen(g_data_seed).detach()
     g_data_set = g_data_set.view(g_data_set.size(0), 1, 28, 28)
-    g_data_set = g_data_set.to('cpu')
     # 下载训练集，如果已存在直接加载
     train_dataset = NumMixDataSet(noiseDataSet=g_data_set, root='./data', train=True, download=True,
                                   transform=transform)
     # 创建数据加载器
     train_loader = DataLoader(train_dataset, batch_size=100, shuffle=True)
+    print("total size=", len(train_dataset))
     batch_index = 0
     for batch_X, batch_Y in train_loader:
         print('batch_index --> ', batch_index)
@@ -64,11 +64,53 @@ def testView():
     for index in range(simple_size):
         col = index % num_cols
         row = int(index / num_cols)
-        tensor_view = view_batch_X[index]
+        tensor_view = view_batch_X[index].to('cpu')
         print("max-->", torch.max(tensor_view).item())
         print("min-->", torch.min(tensor_view).item())
         npImage = tensor_view.permute(1, 2, 0).numpy()
         axes[row, col].imshow(npImage, cmap='gray')
         axes[row, col].set_title(view_batch_Y[index].item())
+    plt.tight_layout()  # 调整子图布局，防止重叠
+    plt.show()
+
+
+def testView1():
+    # 定义数据变换
+    transform = transforms.Compose([
+        transforms.ToTensor(),  # 将图像转换为Tensor
+        transforms.Normalize((0.5,), (0.5,))  # 归一化到[-1, 1]范围
+    ])
+    # 准备生成器伪造的数据
+    Gen = NumGen()
+    g_data_seed = torch.rand(5, 1)
+    g_data_set = Gen(g_data_seed).detach()
+    g_data_set = g_data_set.view(g_data_set.size(0), 1, 28, 28)
+    # 下载训练集，如果已存在直接加载
+    train_dataset = NumMixDataSet(noiseDataSet=g_data_set, root='./data', train=True, download=True,
+                                  transform=transform)
+    simple_size = 20
+    sub_train_dataset = Subset(train_dataset, range(simple_size))
+    # 创建数据加载器
+    train_loader = DataLoader(sub_train_dataset, batch_size=5, shuffle=True)
+
+    # 设置子图的行列数
+    num_cols = 10  # 列
+    num_rows = int(simple_size / num_cols)  # 行
+    # 创建子图并显示图片
+    fig, axes = plt.subplots(num_rows, num_cols, figsize=(10, 8), subplot_kw={'aspect': 'auto'})  # 调整图像大小
+
+    index = 0
+    for batch_X, batch_Y in train_loader:
+        for b_index in range(batch_X.size(0)):
+            col = index % num_cols
+            row = int(index / num_cols)
+            img = batch_X[b_index].to('cpu')
+            tag = batch_Y[b_index]
+            npImage = img.permute(1, 2, 0).numpy()
+            axes[row, col].imshow(npImage, cmap='gray')
+            axes[row, col].set_title(tag.item())
+            index += 1
+        if index >= simple_size:
+            break
     plt.tight_layout()  # 调整子图布局，防止重叠
     plt.show()
