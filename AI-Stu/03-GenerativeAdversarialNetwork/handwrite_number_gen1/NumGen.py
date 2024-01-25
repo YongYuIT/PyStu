@@ -14,7 +14,7 @@ class NumGen(nn.Module):
             nn.Sigmoid(),
         )
         self.netWork.to(torch.cuda.current_device())
-        self.optimiser = torch.optim.SGD(self.parameters(), lr=0.01, momentum=0.9)
+        self.optimiser = torch.optim.SGD(self.netWork.parameters(), lr=0.01, momentum=0.9)
 
     def forward(self, X):
         X = X.to(device='cuda', dtype=torch.float)
