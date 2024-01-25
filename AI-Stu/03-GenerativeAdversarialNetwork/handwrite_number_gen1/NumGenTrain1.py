@@ -14,14 +14,14 @@ transform = transforms.Compose([
 ])
 
 # 训练轮次，数据集上全部训练一遍为一轮
-train_times = 1
+train_times = 10
 Gen = NumGen()
 Disc = NumDisc()
 
 for train_index in range(train_times):
     all_dataset = NumDataSet(root='./data', train=True, download=True,
                              transform=transform)
-    train_loader = DataLoader(all_dataset, batch_size=1, shuffle=True)
+    train_loader = DataLoader(all_dataset, batch_size=10, shuffle=True)
     Disc.trainModel(1, train_loader, gen=Gen)
     print('train index-->', train_index)
 

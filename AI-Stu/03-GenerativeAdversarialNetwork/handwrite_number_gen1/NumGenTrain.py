@@ -14,7 +14,7 @@ transform = transforms.Compose([
 ])
 
 # 训练轮次，数据集上全部训练一遍为一轮
-train_times = 200
+train_times = 10
 Gen = NumGen()
 Disc = NumDisc()
 for train_index in range(train_times):
@@ -47,7 +47,7 @@ with torch.no_grad():
         row = int(index / num_cols)
         img = gen_img[index].view(1, 28, 28).to('cpu')
         npImage = img.permute(1, 2, 0).numpy()
-        axes[row, col].imshow(npImage, cmap='gray')
+        axes[row, col].imshow(npImage, interpolation='none', cmap='Blues')
     plt.tight_layout()  # 调整子图布局，防止重叠
     plt.show()
 
