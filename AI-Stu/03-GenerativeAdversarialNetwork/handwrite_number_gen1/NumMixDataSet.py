@@ -22,7 +22,8 @@ class NumMixDataSet(NumDataSet):
         if index < self.noiseDataSet.size(0):
             return self.noiseDataSet[index], 0
         else:
-            return super().__getitem__(index)
+            img, target = super().__getitem__(index)
+            return img.to(device='cuda'), target
 
 
 def testView():
@@ -71,6 +72,3 @@ def testView():
         axes[row, col].set_title(view_batch_Y[index].item())
     plt.tight_layout()  # 调整子图布局，防止重叠
     plt.show()
-
-
-testView()

@@ -8,6 +8,7 @@ class NumDisc(nn.Module):
     def __init__(self):
         super().__init__()
         self.netWork = nn.Sequential(
+            nn.Flatten(),
             nn.Linear(28 * 28, 200),
             nn.Sigmoid(),
             nn.Linear(200, 1),
@@ -54,4 +55,3 @@ class NumDisc(nn.Module):
                 totalSamples += y_batch.size(0)
                 totalLoss += torch.sum(loss_batch).item()
         return totalLoss / totalSamples
-
