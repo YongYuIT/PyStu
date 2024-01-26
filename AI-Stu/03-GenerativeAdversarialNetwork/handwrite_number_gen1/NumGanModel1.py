@@ -25,6 +25,6 @@ class NumGanModel1(NumGanModel):
         # 将两个模型都移动到GPU执行
         self.DiscModel.to(torch.cuda.current_device())
         self.GenModel.to(torch.cuda.current_device())
-        # 定义两个模型的优化器，学习速率调整为0.0001
-        self.DiscOptimiser = torch.optim.Adam(self.DiscModel.parameters(), lr=0.0001)
-        self.GenOptimiser = torch.optim.Adam(self.GenModel.parameters(), lr=0.0001)
+        # 定义两个模型的优化器
+        self.DiscOptimiser = torch.optim.Adam(self.DiscModel.parameters(), lr=0.01)
+        self.GenOptimiser = torch.optim.Adam(self.GenModel.parameters(), lr=0.01)

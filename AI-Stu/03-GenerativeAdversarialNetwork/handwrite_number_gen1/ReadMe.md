@@ -67,8 +67,8 @@ nn.LeakyReLU(0.02), # 此处将Sigmoid换成LeakyReLU
 nn.Linear(200, 1),
 nn.Sigmoid(),
 
-# 优化器，从SGD换成Adam，学习速率调整为0.0001
-self.DiscOptimiser = torch.optim.Adam(self.DiscModel.parameters(), lr=0.0001)
+# 优化器，从SGD换成Adam
+self.DiscOptimiser = torch.optim.Adam(self.DiscModel.parameters(), lr=0.01)
 ~~~
 
 生成器：
@@ -80,8 +80,8 @@ nn.LeakyReLU(0.02), # 此处将Sigmoid换成LeakyReLU
 nn.Linear(200, 28 * 28),
 nn.Sigmoid(),
 
-# 优化器，从SGD换成Adam，学习速率调整为0.0001
-self.GenOptimiser = torch.optim.Adam(self.GenModel.parameters(), lr=0.0001)
+# 优化器，从SGD换成Adam
+self.GenOptimiser = torch.optim.Adam(self.GenModel.parameters(), lr=0.01)
 ~~~
 
 SGD：new_parameters = old_parameters - learing_rate * gradient

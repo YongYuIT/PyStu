@@ -33,5 +33,5 @@ class NumGanModel2(NumGanModel):
         # 改进采用二元交叉熵损失函数
         self.DiscLoss = nn.BCELoss()
         # 定义两个模型的优化器
-        self.DiscOptimiser = torch.optim.Adam(self.DiscModel.parameters(), lr=0.0001)
-        self.GenOptimiser = torch.optim.Adam(self.GenModel.parameters(), lr=0.0001)
+        self.DiscOptimiser = torch.optim.Adam(self.DiscModel.parameters(), lr=0.01)
+        self.GenOptimiser = torch.optim.Adam(self.GenModel.parameters(), lr=0.01)
