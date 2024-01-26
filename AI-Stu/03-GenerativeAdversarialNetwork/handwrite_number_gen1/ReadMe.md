@@ -114,6 +114,20 @@ LeakyReLU：避免了梯度消失，但是会将输出映射到负数空间（�
 
 损失函数采用二元交叉熵损失函数，更大程度上奖励和惩罚
 
+对于单个样本
+BCELoss(y_hat,y)=-[y*log(y_hat)+(1-y)*log(1-y_hat)]
+多个样本的话，将上面的BCELoss取平均
+
+一般二分问题中，一般y不是0就是1，y_hat在0到1之间
+
+当y等于0时：loss= -log(1-y_hat) = log1/(1-y_hat)
+当y_hat在[0,1)区间时，loss单调递增，y_hat等于0时loss最小为0
+
+当y等于1时：loss = -log(y_hat) = log1/(y_hat)
+当y_hat在[0,1)区间时，loss单调递减，y_hat等于1时loss最小为0
+
+总之，y_hat越靠近y，越接近0；否则就会很大
+
 ~~~
 self.DiscLoss = nn.BCELoss()
 ~~~
@@ -127,4 +141,11 @@ self.DiscLoss = nn.BCELoss()
 ![NumGanModel2Result.png](ReadMe%2FNumGanModel2Result.png)
 
 模式崩溃依然存在，结构变得更加清晰
+
+# 改进模型-3
+
+训练模型时，给生成器传入的随机种子采用randn替换原来的rand
+
+* randn：正态分布随机
+* rand：平均分布随机
 

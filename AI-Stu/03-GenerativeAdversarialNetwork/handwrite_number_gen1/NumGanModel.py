@@ -80,5 +80,5 @@ class NumGanModel(nn.Module):
             loss_gen = self.DiscLoss(g_train_tags, g_train_tags_std)
             self.GenOptimiser.zero_grad()
             loss_gen.backward()
-            self.record[len(self.record)] = [loss_disc.item(), loss_gen.item()]
             self.GenOptimiser.step()
+            self.record[len(self.record)] = [loss_disc.item(), loss_gen.item()]

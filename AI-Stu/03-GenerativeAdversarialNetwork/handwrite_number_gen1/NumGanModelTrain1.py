@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 from NumDataSet import NumDataSet
 import torchvision.transforms as transforms
 
-from NumGanModel2 import NumGanModel2
+from NumGanModel3 import NumGanModel3
 
 # 定义数据变换
 transform = transforms.Compose([
@@ -18,14 +18,14 @@ true_dataset = NumDataSet(root='./data', train=True, download=True, transform=tr
 true_dataloader = DataLoader(true_dataset, batch_size=1, shuffle=True)
 
 # 训练轮次，数据集上全部训练一遍为一轮
-Gan = NumGanModel2()
-train_times = 1
+Gan = NumGanModel3()
+train_times = 3
 Gan.TrainModel(train_times, true_dataloader)
 
 Gan.GenModel.eval()
 with torch.no_grad():
     gen_size = 50
-    g_seed = torch.rand(gen_size, 1).to(device='cuda', dtype=torch.float)
+    g_seed = torch.randn(gen_size, 1).to(device='cuda', dtype=torch.float)
     gen_img = Gan.GenModel(g_seed)
     # 设置子图的行列数
     num_cols = 10  # 列
