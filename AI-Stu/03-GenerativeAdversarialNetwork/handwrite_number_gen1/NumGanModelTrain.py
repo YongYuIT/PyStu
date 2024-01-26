@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 from NumDataSet import NumDataSet
 import torchvision.transforms as transforms
 
-from NumGanModel1 import NumGanModel1
+from NumGanModel2 import NumGanModel2
 
 # 定义数据变换
 transform = transforms.Compose([
@@ -18,7 +18,7 @@ true_dataset = NumDataSet(root='./data', train=True, download=True, transform=tr
 true_dataloader = DataLoader(true_dataset, batch_size=1, shuffle=True)
 
 # 训练轮次，数据集上全部训练一遍为一轮
-Gan = NumGanModel1()
+Gan = NumGanModel2()
 train_times = 1
 
 for train_index in range(train_times):
