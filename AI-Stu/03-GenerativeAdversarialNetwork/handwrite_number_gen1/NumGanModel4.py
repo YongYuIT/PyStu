@@ -1,26 +1,13 @@
 import torch
-from torch import nn
-
-from NumGanModel2 import NumGanModel2
+from NumGanModel3 import NumGanModel3
 
 
-class NumGanModel3(NumGanModel2):
+class NumGanModel4(NumGanModel3):
 
     def __init__(self):
         super().__init__()
-        # 定义生成器模型
-        self.GenModel = nn.Sequential(
-            nn.Linear(100, 200),
-            nn.LeakyReLU(0.02),
-            # 新增标准化层
-            nn.LayerNorm(200),
-            nn.Linear(200, 28 * 28),
-            nn.Sigmoid(),
-        )
-        # 将模型移动到GPU执行
-        self.GenModel.to(torch.cuda.current_device())
         # 定义模型的优化器
-        self.GenOptimiser = torch.optim.Adam(self.GenModel.parameters(), lr=0.01)
+        self.DiscOptimiser = torch.optim.Adam(self.DiscModel.parameters(), lr=0.01)
 
     def TrainEpoch(self, train_iter):
         self.DiscModel.train()
