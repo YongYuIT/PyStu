@@ -4,6 +4,12 @@ from NumGanModel3 import NumGanModel3
 
 class NumGanModel4(NumGanModel3):
 
+    def __init__(self):
+        super().__init__()
+        # 定义两个模型的优化器
+        self.DiscOptimiser = torch.optim.Adam(self.DiscModel.parameters(), lr=0.0001)
+        self.GenOptimiser = torch.optim.Adam(self.GenModel.parameters(), lr=0.0001)
+
     def TrainEpoch(self, train_iter):
         self.DiscModel.train()
         self.GenModel.train()
