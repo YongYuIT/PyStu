@@ -19,13 +19,13 @@ true_dataloader = DataLoader(true_dataset, batch_size=1, shuffle=True)
 
 # 训练轮次，数据集上全部训练一遍为一轮
 Gan = NumGanModel4()
-train_times = 1
+train_times = 2
 Gan.TrainModel(train_times, true_dataloader)
 
 Gan.GenModel.eval()
 with torch.no_grad():
     gen_size = 50
-    g_seed = torch.rand(gen_size, 100).to(device='cuda', dtype=torch.float)
+    g_seed = torch.randn(gen_size, 100).to(device='cuda', dtype=torch.float)
     gen_img = Gan.GenModel(g_seed)
     # 设置子图的行列数
     num_cols = 10  # 列
