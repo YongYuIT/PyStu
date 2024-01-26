@@ -74,8 +74,7 @@ class NumGanModel(nn.Module):
             # 如果g_train_tags全1说明欺骗成功（奖励）
             # 如果g_train_tags全0说明欺骗失败（惩罚）
             g_train_tags = self.DiscModel(g_train_imgs)
-            g_train_tags_std = torch.full((g_trian_tag_seed.size(0), 1), 1, dtype=torch.float).to(device='cuda',
-                                                                                                  dtype=torch.float)
+            g_train_tags_std = torch.full((g_trian_tag_seed.size(0), 1), 1, dtype=torch.float, device='cuda')
             # loss_gen越小，说明g_train_tags越接近全1，生成器越成功
             loss_gen = self.DiscLoss(g_train_tags, g_train_tags_std)
             self.GenOptimiser.zero_grad()
