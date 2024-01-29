@@ -20,7 +20,7 @@ true_dataloader = DataLoader(true_dataset, batch_size=1, shuffle=True)
 
 # 训练轮次，数据集上全部训练一遍为一轮
 Gan = NumGanModel4()
-train_times = 4
+train_times = 10
 Gan.TrainModel(train_times, true_dataloader)
 
 Gan.GenModel.eval()

@@ -188,3 +188,7 @@ MNIST数据集本身就已经将图片数据归一化到[0,1]，无需更多的�
 完美解决模式崩溃问题
 
 加大训练次数至10次
+
+![NumGanModel4-2.png](ReadMe%2FNumGanModel4-2.png)
+
+![NumGanModel4-2Result.png](ReadMe%2FNumGanModel4-2Result.png)
