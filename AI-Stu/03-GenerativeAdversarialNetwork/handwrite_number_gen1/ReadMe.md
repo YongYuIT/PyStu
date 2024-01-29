@@ -144,8 +144,47 @@ self.DiscLoss = nn.BCELoss()
 
 # 改进模型-3
 
-训练模型时，给生成器传入的随机种子采用randn替换原来的rand
+将随机数种子从单个值扩展到100个值即：
+* 改进前，一个float值对应一个图片
+* 改进后，100个float值对应一个图片
 
-* randn：正态分布随机
-* rand：平均分布随机
+训练方式不变，结果：
 
+![NumGanModel3.png](ReadMe%2FNumGanModel3.png)
+
+![NumGanModel3Result.png](ReadMe%2FNumGanModel3Result.png)
+
+模式崩溃依然存在
+
+# 改进模型-4
+
+改-3中，随机数种子100个值从rand改进到randn
+
+* randn：均值为0，标准差为1的正态分布随机
+* rand：[0,1]区间上平均分布随机
+
+训练加倍到20次，结果：
+
+![NumGanModel4.png](ReadMe%2FNumGanModel4.png)
+
+![NumGanModel4Result.png](ReadMe%2FNumGanModel4Result.png)
+
+# 改进训练
+
+在改-4中，加大训练次数后，发现图片有效信息快消失了。通过对比Demo发现是输入数据归一化的问题。
+
+MNIST数据集本身就已经将图片数据归一化到[0,1]，无需更多的归一化处理，前面没有意识到这个问题，教训惨痛
+
+以后每次训练之前都需要再三确认输入数据范围是否符合预期
+
+本次改进通改-4，继续使用[NumGanModel4.py](NumGanModel4.py)模型，训练采用[NumGanModelTrain3.py](NumGanModelTrain3.py)
+
+修正归一化的问题，训练4轮，结果：
+
+![NumGanModel4-1.png](ReadMe%2FNumGanModel4-1.png)
+
+![NumGanModel4-1Result.png](ReadMe%2FNumGanModel4-1Result.png)
+
+完美解决模式崩溃问题
+
+加大训练次数至10次

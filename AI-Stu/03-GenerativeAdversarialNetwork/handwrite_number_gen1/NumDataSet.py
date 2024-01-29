@@ -15,7 +15,8 @@ def testView():
     # 定义数据变换
     transform = transforms.Compose([
         transforms.ToTensor(),  # 将图像转换为Tensor
-        transforms.Normalize((0.5,), (0.5,))  # 归一化到[-1, 1]范围
+        # transforms.Normalize((0.5,), (0.5,))  # 归一化到[-1, 1]范围
+        # transforms.Lambda(lambda X: X / 255.0)
     ])
     # 下载训练集，如果已存在直接加载
     # train_dataset = MNIST(root='./data', train=True, download=True, transform=transform)
