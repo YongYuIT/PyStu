@@ -26,6 +26,9 @@ class Discriminator(nn.Module):
             nn.Sigmoid()
         )
 
+        # 转移到GPU
+        self.model.to(torch.cuda.current_device())
+
         # create loss function
         self.loss_function = nn.BCELoss()
 
@@ -43,6 +46,10 @@ class Discriminator(nn.Module):
         return self.model(inputs)
 
     def train(self, inputs, targets):
+
+        inputs = inputs.to(device='cuda')
+        targets = targets.to(device='cuda')
+
         # calculate the output of the network
         outputs = self.forward(inputs)
 
@@ -50,7 +57,7 @@ class Discriminator(nn.Module):
         loss = self.loss_function(outputs, targets)
 
         # increase counter and accumulate error every 10
-        self.counter += 1;
+        self.counter += 1
         if (self.counter % 10 == 0):
             self.progress.append(loss.item())
             pass
@@ -68,6 +75,7 @@ class Discriminator(nn.Module):
     def plot_progress(self):
         df = pandas.DataFrame(self.progress, columns=['loss'])
         df.plot(ylim=(0), figsize=(16, 8), alpha=0.1, marker='.', grid=True, yticks=(0, 0.25, 0.5, 1.0, 5.0))
+        plt.title("Discriminator loss")
         plt.show()
         pass
 
