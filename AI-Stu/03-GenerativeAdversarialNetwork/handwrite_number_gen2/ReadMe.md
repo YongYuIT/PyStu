@@ -17,4 +17,18 @@
 * 表现：![NumGanModel2.png](ReadMe%2FNumGanModel2.png)![NumGanModel2Result.png](ReadMe%2FNumGanModel2Result.png)
 
 增加训练次数到60万次
+
 * 表现：![NumGanModel2-1.png](ReadMe%2FNumGanModel2-1.png)![NumGanModel2-1Result.png](ReadMe%2FNumGanModel2-1Result.png)
+
+# 优化3
+
+* 模型：[NumGanModel3.py](NumGanModel3.py)，扩展生成器随机种子（从单个值扩展到100个值）
+* 训练：跳过
+
+# 优化4
+
+* 模型：[NumGanModel4.py](NumGanModel4.py)，进一步扩展生成器随机种子（rand替换成randn）
+* 训练：[NumGanModelTrain3.py](NumGanModelTrain3.py)，60万次
+* 表现：![NumGanModel4.png](ReadMe%2FNumGanModel4.png)![NumGanModel4Result.png](ReadMe%2FNumGanModel4Result.png)
+
+增加训练次数到120万次
