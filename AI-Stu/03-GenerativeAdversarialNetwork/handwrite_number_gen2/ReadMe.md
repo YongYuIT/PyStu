@@ -16,3 +16,5 @@
 * 训练：[NumGanModelTrain.py](NumGanModelTrain.py)，48万次
 * 表现：![NumGanModel2.png](ReadMe%2FNumGanModel2.png)![NumGanModel2Result.png](ReadMe%2FNumGanModel2Result.png)
 
+增加训练次数到60万次
+* 表现：![NumGanModel2-1.png](ReadMe%2FNumGanModel2-1.png)![NumGanModel2-1Result.png](ReadMe%2FNumGanModel2-1Result.png)
