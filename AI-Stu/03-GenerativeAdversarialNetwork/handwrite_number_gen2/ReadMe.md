@@ -32,3 +32,9 @@
 * 表现：![NumGanModel4.png](ReadMe%2FNumGanModel4.png)![NumGanModel4Result.png](ReadMe%2FNumGanModel4Result.png)
 
 增加训练次数到120万次
+
+* 表现：![NumGanModel4-1.png](ReadMe%2FNumGanModel4-1.png)![NumGanModel4-1Result.png](ReadMe%2FNumGanModel4-1Result.png)
+
+
+* 训练：[NumGanModelTrain4.py](NumGanModelTrain4.py)，将batch size从1改到100，训练次数维持60万次
+* 表现
