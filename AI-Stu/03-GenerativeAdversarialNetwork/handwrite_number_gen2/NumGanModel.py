@@ -46,6 +46,7 @@ class NumGanModel(nn.Module):
     def TrainModel(self, num_epochs, train_iter):
         for epoch_index in range(num_epochs):
             self.TrainEpoch(train_iter)
+            print("finish epoch index-->", epoch_index, "--of--", num_epochs)
         showDict("NumGanModel", self.record, "barch times", ["loss_disc", "loss_gen"])
 
     def TrainEpoch(self, train_iter):
