@@ -42,3 +42,6 @@
 # 优化5
 
 使用卷积GAN
+
+* 训练：[NumGanModelTrain5.py](NumGanModelTrain5.py)，将batch size从1改到100，训练次数维持120万次
+* 表现：![NumGanModel5.png](ReadMe%2FNumGanModel5.png)![NumGanModel5Result.png](ReadMe%2FNumGanModel5Result.png)
